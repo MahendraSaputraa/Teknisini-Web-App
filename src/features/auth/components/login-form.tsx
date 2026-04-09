@@ -15,91 +15,58 @@ import {
   FieldSeparator,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { loginSchema } from "../schema";
+import { useLogin } from "../hooks/use-login";
+import { FormInput } from "@/components/form-components/form-input";
+import { Spinner } from "@/components/ui/spinner";
 
 export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
-  const router = useRouter();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+  const mutation = useLogin();
+  const [errors, setErrors] = useState<any>({});
+  const [loginPayload, setLoginPayload] = useState({
+    email: "",
+    password: "",
+  });
 
-  const resolveLogin = async () => {
-    const currentUser = auth.currentUser;
-    if (!currentUser) {
+  const handleSubmit = (e: any) => {
+    e.preventDefault();
+    console.log("error", errors);
+
+    const result = loginSchema.safeParse(loginPayload);
+    if (!result.success) {
+      const fieldErrors = result.error.flatten().fieldErrors;
+      setErrors(fieldErrors);
       return;
     }
 
-    const idToken = await currentUser.getIdToken();
-    document.cookie = `token=${idToken}; path=/; max-age=3600; samesite=lax`;
-
-    const meResponse = await fetch("/api/auth/me", {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${idToken}`,
-      },
-    });
-
-    if (meResponse.ok) {
-      const me = (await meResponse.json()) as { data?: { role?: string } };
-      if (me.data?.role === "admin") {
-        router.push("/admin");
-        return;
-      }
-    }
-
-    router.push("/");
-  };
-
-  const onSubmitLogin = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    setErrorMessage("");
-    setIsLoading(true);
-
-    try {
-      if (!email || !password) {
-        setErrorMessage("Email dan password wajib diisi");
-        return;
-      }
-
-      await signInWithEmailAndPassword(auth, email, password);
-      await resolveLogin();
-    } catch (error) {
-      if (error instanceof Error) {
-        setErrorMessage(error.message);
-      } else {
-        setErrorMessage("Login gagal");
-      }
-    } finally {
-      setIsLoading(false);
-    }
+    mutation.mutate(loginPayload);
   };
 
   const onGoogleLogin = async () => {
-    setErrorMessage("");
-    setIsLoading(true);
-
-    try {
-      await signInWithPopup(auth, googleProvider);
-      await resolveLogin();
-    } catch (error) {
-      if (error instanceof Error) {
-        setErrorMessage(error.message);
-      } else {
-        setErrorMessage("Google login gagal");
-      }
-    } finally {
-      setIsLoading(false);
-    }
+    // setErrorMessage("");
+    // setIsLoading(true);
+    // try {
+    //   await signInWithPopup(auth, googleProvider);
+    //   await resolveLogin();
+    // } catch (error) {
+    //   if (error instanceof Error) {
+    //     setErrorMessage(error.message);
+    //   } else {
+    //     setErrorMessage("Google login gagal");
+    //   }
+    // } finally {
+    //   setIsLoading(false);
+    // }
   };
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card className="overflow-hidden p-0">
         <CardContent className="grid p-0 md:grid-cols-2">
-          <form className="p-6 md:p-8" onSubmit={onSubmitLogin}>
+          <form className="p-6 md:p-8" onSubmit={handleSubmit}>
             <FieldGroup>
               <div className="flex flex-col items-center gap-2 text-center">
                 <h1 className="text-2xl font-bold">Welcome back</h1>
@@ -107,34 +74,43 @@ export function LoginForm({
                   Login ke akun TekniSini
                 </p>
               </div>
+              <FormInput
+                label="Email"
+                name="email"
+                type="email"
+                placeholder="m@example.com"
+                required
+                value={loginPayload.email}
+                onChange={(e) =>
+                  setLoginPayload((prev) => ({
+                    ...prev,
+                    email: e.target.value,
+                  }))
+                }
+                error={errors?.email?.[0]}
+              />
+
+              <FormInput
+                label="Password"
+                name="password"
+                type="password"
+                required
+                value={loginPayload.password}
+                onChange={(e) =>
+                  setLoginPayload((prev) => ({
+                    ...prev,
+                    password: e.target.value,
+                  }))
+                }
+                error={errors?.password?.[0]}
+              />
+
               <Field>
-                <FieldLabel htmlFor="email">Email</FieldLabel>
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="email@example.com"
-                  value={email}
-                  onChange={(event) => setEmail(event.target.value)}
-                  required
-                />
-              </Field>
-              <Field>
-                <div className="flex items-center">
-                  <FieldLabel htmlFor="password">Password</FieldLabel>
-                </div>
-                <Input
-                  id="password"
-                  type="password"
-                  value={password}
-                  onChange={(event) => setPassword(event.target.value)}
-                  required
-                />
-              </Field>
-              <Field>
-                <Button type="submit" disabled={isLoading}>
-                  {isLoading ? "Loading..." : "Login"}
+                <Button disabled={mutation.isPending} type="submit">
+                  {mutation.isPending ? <Spinner /> : "Login"}
                 </Button>
               </Field>
+
               <FieldSeparator className="*:data-[slot=field-separator-content]:bg-card">
                 Or continue with
               </FieldSeparator>
@@ -149,11 +125,7 @@ export function LoginForm({
                   Login with Google
                 </Button>
               </Field>
-              {errorMessage ? (
-                <FieldDescription className="text-center text-red-500">
-                  {errorMessage}
-                </FieldDescription>
-              ) : null}
+
               <FieldDescription className="text-center">
                 Don&apos;t have an account? <a href="/register">Sign up</a>
               </FieldDescription>

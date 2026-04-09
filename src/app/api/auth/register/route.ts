@@ -24,18 +24,18 @@ function handleApiError(error: unknown) {
 
 export async function POST(request: Request) {
   try {
-    const body = (await request.json()) as RegisterBody
-    const name = body.name?.trim()
-    const email = body.email?.trim().toLowerCase()
-    const phone = body.phone?.trim()
-    const password = body.password
+    const body = (await request.json()) as RegisterBody;
+    const name = body.name?.trim();
+    const email = body.email?.trim().toLowerCase();
+    const phone = body.phone?.trim();
+    const password = body.password;
 
     if (!name || !email || !phone || !password) {
-      throw new AppError("name, email, phone, and password are required", 400)
+      throw new AppError("name, email, phone, and password are required", 400);
     }
 
     if (password.length < 6) {
-      throw new AppError("password must be at least 6 characters", 400)
+      throw new AppError("password must be at least 6 characters", 400);
     }
 
     const createdAuthUser = await adminAuth.createUser({
@@ -43,7 +43,7 @@ export async function POST(request: Request) {
       password,
       displayName: name,
       phoneNumber: phone.startsWith("+") ? phone : undefined,
-    })
+    });
 
     await db.collection("users").doc(createdAuthUser.uid).set({
       name,
@@ -51,12 +51,26 @@ export async function POST(request: Request) {
       phone,
       role: "user",
       created_at: Timestamp.now(),
-    })
+    });
+
+    // Generate custom token after successful registration
+    const customToken = await adminAuth.createCustomToken(createdAuthUser.uid);
 
     return NextResponse.json(
-      { message: "User registered successfully" },
-      { status: 201 }
-    )
+      {
+        message: "User registered successfully",
+        data: {
+          token: customToken,
+          user: {
+            uid: createdAuthUser.uid,
+            email,
+            name,
+            role: "user",
+          },
+        },
+      },
+      { status: 201 },
+    );
   } catch (error) {
     return handleApiError(error)
   }

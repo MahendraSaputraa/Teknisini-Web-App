@@ -1,0 +1,15 @@
+import api from "@/lib/axios";
+
+export const getCurrentUser = async () => {
+  const res = await api.get("/auth/me");
+  return res.data;
+};
+
+export const login = async (payload: any) => {
+  const res = await api.post("/auth/login", payload);
+  return res.data;
+};
+export const register = async (payload: any) => {
+  const res = await api.post("/auth/register", payload);
+  return res.data;
+};

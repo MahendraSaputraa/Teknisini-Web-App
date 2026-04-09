@@ -1,43 +1,48 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
-const PUBLIC_ROUTES = ["/login", "/register"];
-export const ROLES = {
-  TEKNISI: "teknisi",
-  ADMIN: "admin",
-  CUSTOMER: "customer",
-};
+const ADMIN_PATH_PREFIX = "/admin";
 
-export function proxy(req: NextRequest) {
+export async function proxy(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
-  if (PUBLIC_ROUTES.includes(pathname)) {
+  if (!pathname.startsWith(ADMIN_PATH_PREFIX)) {
     return NextResponse.next();
   }
 
-  const token = "";
-  const role = ROLES.CUSTOMER;
+  const token = req.cookies.get("token")?.value;
 
   if (!token) {
     return NextResponse.redirect(new URL("/login", req.url));
   }
 
-  if (pathname.startsWith("/admin") && role !== "admin") {
+  try {
+    const response = await fetch(new URL("/api/auth/me", req.url), {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      return NextResponse.redirect(new URL("/login", req.url));
+    }
+
+    const payload = (await response.json()) as {
+      data?: { role?: string };
+    };
+
+    if (payload.data?.role !== "admin") {
+      return NextResponse.redirect(new URL("/", req.url));
+    }
+
+    return NextResponse.next();
+  } catch {
     return NextResponse.redirect(new URL("/", req.url));
   }
-
-  if (pathname.startsWith("/teknisi") && role !== "teknisi") {
-    return NextResponse.redirect(new URL("/", req.url));
-  }
-
-  if (pathname.startsWith("/customer") && role !== "customer") {
-    return NextResponse.redirect(new URL("/", req.url));
-  }
-
-  return NextResponse.next();
 }
 
 // route yang kena middleware
 export const config = {
-  matcher: ["/admin/:path*", "/teknisi/:path*", "/customer/:path*"],
+  matcher: ["/admin/:path*"],
 };

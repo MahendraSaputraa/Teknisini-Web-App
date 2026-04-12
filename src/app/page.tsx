@@ -1,9 +1,16 @@
-import Image from "next/image";
+"use client";
+import HomePageData from "@/features/home";
+import CustomerWrapper from "@/providers/customer-provider";
 
-export default function Home() {
+export default function Home({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <h1>Public Route</h1>
-    </div>
+    <CustomerWrapper>
+      <HomePageData />
+      {children}
+    </CustomerWrapper>
   );
 }

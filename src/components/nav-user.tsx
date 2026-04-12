@@ -20,7 +20,9 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar"
+import { useLogout } from "@/hooks/use-logout";
 import { EllipsisVerticalIcon, CircleUserRoundIcon, CreditCardIcon, BellIcon, LogOutIcon } from "lucide-react"
+import Cookies from "js-cookie";
 
 export function NavUser({
   user,
@@ -32,7 +34,8 @@ export function NavUser({
   }
 }) {
   const { isMobile } = useSidebar()
-
+  const { mutate: logout, isPending } = useLogout();
+  const token = Cookies.get("access_token");
   return (
     <SidebarMenu>
       <SidebarMenuItem>
@@ -75,33 +78,23 @@ export function NavUser({
                 </div>
               </div>
             </DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <CircleUserRoundIcon
-                />
-                Account
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <CreditCardIcon
-                />
-                Billing
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <BellIcon
-                />
-                Notifications
-              </DropdownMenuItem>
-            </DropdownMenuGroup>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>
-              <LogOutIcon
-              />
-              Log out
-            </DropdownMenuItem>
+            {token && (
+              <>
+                <DropdownMenuSeparator />
+
+                <DropdownMenuItem
+                  className="py-2"
+                  onClick={() => logout()}
+                  disabled={isPending}
+                >
+                  <LogOutIcon />
+                  {isPending ? "Logging out..." : "Log out"}
+                </DropdownMenuItem>
+              </>
+            )}
           </DropdownMenuContent>
         </DropdownMenu>
       </SidebarMenuItem>
     </SidebarMenu>
-  )
+  );
 }

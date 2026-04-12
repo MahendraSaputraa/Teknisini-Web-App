@@ -1,25 +1,51 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
-const ADMIN_PATH_PREFIX = "/admin";
+export async function proxy(request: NextRequest) {
+  const { pathname } = request.nextUrl;
 
-export async function proxy(req: NextRequest) {
-  const { pathname } = req.nextUrl;
+  const token = request.cookies.get("access_token")?.value;
+  const role = request.cookies.get("role")?.value;
 
-  if (!pathname.startsWith(ADMIN_PATH_PREFIX)) {
+  // Bypass: Next.js internals & static files
+  if (
+    pathname.startsWith("/_next") ||
+    pathname.startsWith("/favicon.ico") ||
+    pathname.startsWith("/api")
+  ) {
     return NextResponse.next();
   }
 
-  const token = req.cookies.get("token")?.value;
-
-  if (!token) {
-    return NextResponse.redirect(new URL("/login", req.url));
+  const publicRoutes = ["/", "/login", "/register"];
+  if (publicRoutes.some((route) => pathname === route)) {
+    if (pathname === "/" && token && role === "admin") {
+      return NextResponse.redirect(new URL("/admin/dashboard", request.url));
+    }
+    return NextResponse.next();
   }
 
+  // Protected routes — wajib login
+  if (!token) {
+    const loginUrl = new URL("/login", request.url);
+    loginUrl.searchParams.set("callbackUrl", pathname);
+    return NextResponse.redirect(loginUrl);
+  }
 
+  // Role guard
+  if (pathname.startsWith("/admin") && role !== "admin") {
+    return NextResponse.redirect(new URL("/", request.url));
+  }
+
+  if (pathname.startsWith("/customer") && role !== "user") {
+    if (role === "admin") {
+      return NextResponse.redirect(new URL("/admin/dashboard", request.url));
+    }
+    return NextResponse.redirect(new URL("/", request.url));
+  }
+
+  return NextResponse.next();
 }
 
-// route yang kena middleware
 export const config = {
-  matcher: ["/admin/:path*"],
+  matcher: ["/", "/login", "/register", "/admin/:path*", "/customer/:path*"],
 };

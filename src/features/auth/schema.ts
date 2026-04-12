@@ -7,6 +7,7 @@ export const loginSchema = z.object({
 
 export const registerSchema = z.object({
   email: z.string().email("Email tidak valid"),
-  fullname: z.string().min(2, "Nama minimal 3 karakter"),
+  phone: z.string().min(9, "Nomor minimal 9 angka"),
+  name: z.string().min(2, "Nama minimal 3 karakter"),
   password: z.string().min(6, "Password minimal 6 karakter"),
 });

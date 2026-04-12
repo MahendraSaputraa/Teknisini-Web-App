@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { LogOutIcon, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -29,6 +29,19 @@ const navLinks = [
 export default function Navbar({ user }: any) {
   const { mutate: logout } = useLogout();
   const token = Cookies.get("access_token");
+
+   const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+    
+// eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Render minimal saat SSR
+  if (!isMounted) {
+    return <nav className="sticky top-0">Loading...</nav>;
+  }
 
   return (
     <nav className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">

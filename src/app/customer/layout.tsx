@@ -1,3 +1,4 @@
+"use client";
 import CustomerWrapper from "@/providers/customer-provider";
 export default function CustomerLayout({
   children,

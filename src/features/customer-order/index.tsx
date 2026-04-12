@@ -1,19 +1,4 @@
-import React from "react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import {
-  Truck,
-  User,
-  Clock,
-  ArrowRight,
-  History,
-  Wrench,
-  MapPin,
-  Star,
-  Activity,
-  PlugZap,
-  Wifi,
-} from "lucide-react";
+"use client";
 import ActiveService from "./components/active-service";
 import ServiceHistory from "./components/service-history";
 

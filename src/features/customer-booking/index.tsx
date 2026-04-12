@@ -1,3 +1,4 @@
+"use client";
 import LeftForm from "./components/left-form";
 import Cart from "./components/cart";
 

@@ -28,7 +28,9 @@ export const useRegister = () => {
         await queryClient.invalidateQueries({ queryKey: ["current-user"] });
 
         const destination = user.role === "admin" ? "/admin/dashboard" : "/";
-        route.push(destination);
+ 
+
+      window.location.href = destination;
       } catch (error) {
         toast.error("Gagal melakukan autentikasi dengan Firebase.");
         console.error("Firebase Auth Error:", error);

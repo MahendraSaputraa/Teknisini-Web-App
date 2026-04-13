@@ -27,7 +27,9 @@ export const useLogin = () => {
         await queryClient.invalidateQueries({ queryKey: ["current-user"] });
 
         const destination = user.role === "admin" ? "/admin/dashboard" : "/";
-        route.push(destination);
+ 
+
+      window.location.href = destination;
       } catch (error) {
         toast.error("Gagal sinkronisasi sesi dengan Firebase.");
         console.error("Firebase Login Error:", error);

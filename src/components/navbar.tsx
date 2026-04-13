@@ -19,6 +19,7 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 import { useLogout } from "@/hooks/use-logout";
+import { ModeToggle } from "./ui/mode-toggle";
 
 const navLinks = [
   { title: "Services", href: "#" },
@@ -30,12 +31,12 @@ export default function Navbar({ user }: any) {
   const { mutate: logout } = useLogout();
   const token = Cookies.get("access_token");
 
-   const [isMounted, setIsMounted] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
     setIsMounted(true);
-    
-// eslint-disable-next-line react-hooks/exhaustive-deps
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Render minimal saat SSR
@@ -75,11 +76,12 @@ export default function Navbar({ user }: any) {
             <Button className="rounded-full px-6 bg-primary hover:bg-primary/90">
               <Link href="/register">Register</Link>
             </Button>
+            <ModeToggle />
           </div>
         )}
 
         {token && user && (
-          <div className="hidden md:flex lg:w-2/12 justify-end">
+          <div className="hidden md:flex items-center gap-4 lg:w-2/12 justify-end">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <button className="flex items-center gap-3 px-3 py-2 rounded-full hover:bg-muted transition">
@@ -105,6 +107,7 @@ export default function Navbar({ user }: any) {
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
+            <ModeToggle />
           </div>
         )}
 

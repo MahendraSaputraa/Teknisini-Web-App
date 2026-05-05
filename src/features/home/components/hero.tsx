@@ -53,7 +53,7 @@ export default function Hero() {
             <div className="relative aspect-square md:aspect-[4/3] w-full overflow-hidden rounded-[2rem] bg-muted">
               {/* Ganti src ini dengan gambar aslimu yang ada di folder public */}
               <img
-                src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-9.jpg"
+                src="/images/image1.png"
                 alt="Teknisi sedang bekerja"
                 className="h-full w-full object-cover object-center"
               />

@@ -1,4 +1,5 @@
 "use client";
+
 import {
   ComboBoxOption,
   FormComboBox,
@@ -6,20 +7,63 @@ import {
 import { FormInput } from "@/components/form-components/form-input";
 import { FormTextarea } from "@/components/form-components/form-textarea";
 import { Card, CardContent } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { ChevronDown, Crosshair, MapPin, User, Wrench } from "lucide-react";
-import { useState } from "react";
+import { User, Wrench, MapPin } from "lucide-react";
+import { useState, useEffect } from "react";
+import dynamic from "next/dynamic";
+
+const MapPicker = dynamic(() => import("./map-picker"), {
+  ssr: false,
+  loading: () => (
+    <div className="h-full w-full bg-slate-200 dark:bg-muted/30 animate-pulse flex items-center justify-center text-slate-400">
+      Memuat Peta...
+    </div>
+  ),
+});
 
 export default function LeftForm() {
-  const KOTA_OPTIONS: ComboBoxOption[] = [
-    { label: "Jakarta", value: "jkt" },
-    { label: "Bandung", value: "bdo" },
-    { label: "Surabaya", value: "sub" },
-    { label: "Yogyakarta", value: "jog" },
-    { label: "Bali", value: "dps" },
+  const [name, setName] = useState("Budi in Bali");
+  const [whatsapp, setWhatsapp] = useState("089821213121341");
+
+  const DUMMY_OPTIONS: ComboBoxOption[] = [
+    { label: "Opsi 1", value: "opt1" },
+    { label: "Opsi 2", value: "opt2" },
   ];
-  const [kotaPilihan, setKotaPilihan] = useState<string | number | null>(null);
+  const [kategori, setKategori] = useState<string | number | null>(null);
+  const [layananSpesifik, setLayananSpesifik] = useState<
+    string | number | null
+  >(null);
+  const [catatan, setCatatan] = useState("");
+
+  const [location, setLocation] = useState({ lat: -8.65, lng: 115.216667 });
+  const [alamatText, setAlamatText] = useState(
+    "Geser pin pada peta untuk menentukan lokasi...",
+  );
+
+  useEffect(() => {
+    const fetchAddress = async () => {
+      try {
+        setAlamatText("Mencari alamat...");
+        const res = await fetch(
+          `https://nominatim.openstreetmap.org/reverse?format=json&lat=${location.lat}&lon=${location.lng}`,
+        );
+        const data = await res.json();
+        if (data && data.display_name) {
+          setAlamatText(data.display_name);
+        } else {
+          setAlamatText(
+            "Alamat tidak ditemukan. Pastikan pin berada di lokasi yang valid.",
+          );
+        }
+      } catch (error) {
+        console.error("Gagal mendapatkan alamat:", error);
+        setAlamatText("Gagal mengambil alamat otomatis.");
+      }
+    };
+
+    const timeoutId = setTimeout(() => fetchAddress(), 800); // debounce 800ms biar nggak spam API
+    return () => clearTimeout(timeoutId);
+  }, [location.lat, location.lng]);
+
   return (
     <div className="flex w-full flex-col gap-6 lg:w-2/3">
       {/* 1. Card Informasi Pelanggan */}
@@ -37,19 +81,19 @@ export default function LeftForm() {
               label="Nama Lengkap"
               name="name"
               type="text"
-              placeholder="Masukan nama Teknisi"
-              value={"Budi in Bali"}
-              onChange={() => console.log("budi")}
+              placeholder="Masukan nama pelanggan"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
               required
             />
             <FormInput
               className="h-12"
               label="Whatsapp"
-              name="name"
+              name="whatsapp"
               type="text"
-              placeholder="Masukan nama Teknisi"
-              value={"089821213121341"}
-              onChange={() => console.log("budi")}
+              placeholder="Masukan nomor Whatsapp"
+              value={whatsapp}
+              onChange={(e) => setWhatsapp(e.target.value)}
               required
             />
           </div>
@@ -68,22 +112,22 @@ export default function LeftForm() {
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
             <FormComboBox
               label="Kategori"
-              name="kota"
-              placeholder="Cari dan pilih kota..."
+              name="kategori"
+              placeholder="Pilih kategori layanan..."
               className="h-12"
-              options={KOTA_OPTIONS}
-              value={kotaPilihan}
-              onChange={(val) => setKotaPilihan(val)}
+              options={DUMMY_OPTIONS}
+              value={kategori}
+              onChange={(val) => setKategori(val)}
               required
             />
             <FormComboBox
               label="Layanan Spesifik"
-              name="kota"
-              placeholder="Cari dan pilih kota..."
+              name="layananSpesifik"
+              placeholder="Pilih layanan spesifik..."
               className="h-12"
-              options={KOTA_OPTIONS}
-              value={kotaPilihan}
-              onChange={(val) => setKotaPilihan(val)}
+              options={DUMMY_OPTIONS}
+              value={layananSpesifik}
+              onChange={(val) => setLayananSpesifik(val)}
               required
             />
           </div>
@@ -91,14 +135,15 @@ export default function LeftForm() {
             label="Catatan Tambahan"
             name="catatan"
             placeholder="Tuliskan instruksi atau pesan khusus di sini..."
-            value={"catatan"}
-            onChange={(e) => console.log(e.target.value)}
+            value={catatan}
+            onChange={(e) => setCatatan(e.target.value)}
             required={true}
             rows={5}
           />
         </CardContent>
       </Card>
 
+      {/* 3. Card Lokasi Pengerjaan */}
       <Card className="border-none shadow-sm sm:rounded-2xl">
         <CardContent className="p-6 sm:p-8">
           <div className="mb-6 flex items-center gap-3 text-primary">
@@ -107,24 +152,21 @@ export default function LeftForm() {
               Lokasi Pengerjaan
             </h3>
           </div>
+
           <FormInput
-            className="h-12"
-            label="Alamat Lengkap"
-            name="name"
+            className="h-12 bg-slate-50 dark:bg-slate-900 text-slate-500"
+            label={`Alamat Lengkap (Lat: ${location.lat.toFixed(5)}, Lng: ${location.lng.toFixed(5)})`}
+            name="alamat"
             type="text"
-            placeholder="Masukan nama Teknisi"
-            value={"Bali jakarta selatan gianyar"}
-            onChange={() => console.log("budi")}
+            placeholder="Mencari alamat..."
+            value={alamatText}
+            onChange={() => {}} // Sengaja dikosongkan karena readonly
+            readOnly={true}
             required
           />
 
-          {/* Mockup Maps (Ganti src dengan image peta aslimu atau integrasi Google Maps) */}
-          <div className="mt-4 aspect-[2/1] w-full overflow-hidden rounded-xl bg-slate-200 dark:bg-muted/30">
-            <img
-              src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-9.jpg"
-              alt="Map Location"
-              className="h-full w-full object-cover"
-            />
+          <div className="mt-4 w-full overflow-hidden rounded-xl   relative z-0">
+            <MapPicker position={location} onPositionChange={setLocation} />
           </div>
         </CardContent>
       </Card>

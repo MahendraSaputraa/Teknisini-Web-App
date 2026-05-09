@@ -34,7 +34,7 @@ export default function StepSection() {
 
             {/* Ganti dengan <Image /> Next.js untuk performa terbaik */}
             <img
-              src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-9.jpg"
+              src="/images/Step-Teknisini.jpg"
               alt="Teknisi profesional melayani pelanggan"
               className="relative z-10 aspect-square w-full object-cover object-center rounded-[2.5rem] shadow-md sm:aspect-[4/5] lg:aspect-square"
             />
@@ -75,11 +75,11 @@ export default function StepSection() {
               <div className="absolute left-0 top-0 h-full w-2 bg-primary"></div>
 
               <p className="mb-4 text-sm font-medium italic leading-relaxed text-muted-foreground md:text-base">
-                "Layanan yang sangat profesional! Teknisi datang hanya dalam 30
+                "Layanan yang sangat profesional! Teknisi datang hanya dalam 35
                 menit dan memperbaiki AC saya dengan sangat rapi."
               </p>
               <p className="text-sm font-bold text-foreground">
-                — Budi Pratama, Jakarta Pusat
+                — Budi Pratama, Denpasar Utara
               </p>
             </div>
           </div>

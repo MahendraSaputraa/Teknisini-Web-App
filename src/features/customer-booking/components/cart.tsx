@@ -22,9 +22,9 @@ export default function Cart() {
             </div>
             <div className="flex justify-between text-muted-foreground">
               <span className="flex items-center gap-1">
-                Platform Fee (15%) <Info className="h-3 w-3" />
+                Tranport <Info className="h-3 w-3" />
               </span>
-              <span className="font-semibold text-foreground">Rp 22.500</span>
+              <span className="font-semibold text-foreground">Rp 25.000</span>
             </div>
           </div>
 
@@ -40,7 +40,7 @@ export default function Cart() {
                 Total Est.
               </span>
               <span className="text-2xl font-bold text-primary">
-                Rp 172.500
+                Rp 175.000
               </span>
             </div>
           </div>
@@ -50,7 +50,7 @@ export default function Cart() {
             <ShieldCheck className="h-5 w-5 shrink-0" />
             <p className="leading-relaxed">
               Transaksi aman. Pembayaran hanya akan diteruskan ke teknisi
-              setelah pengerjaan selesai Anda konfirmasi.
+              setelah pengerjaan selesai Anda konfirmasi atau setelah 24 jam dari pekerjaan selesai. 
             </p>
           </div>
 

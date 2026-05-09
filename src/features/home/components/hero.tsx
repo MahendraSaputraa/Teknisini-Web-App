@@ -53,8 +53,8 @@ export default function Hero() {
             <div className="relative aspect-square md:aspect-[4/3] w-full overflow-hidden rounded-[2rem] bg-muted">
               {/* Ganti src ini dengan gambar aslimu yang ada di folder public */}
               <img
-                src="/images/image1.png"
-                alt="Teknisi sedang bekerja"
+                src="/images/Hero-Teknisini.jpg"
+                alt="Teknisi Tersenyum"
                 className="h-full w-full object-cover object-center"
               />
 

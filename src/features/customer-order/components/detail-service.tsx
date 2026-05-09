@@ -20,7 +20,7 @@ export default function ServiceDetail() {
         <Card className="border-none shadow-sm sm:rounded-[2rem]">
           <CardContent className="p-6 sm:p-10">
             <h2 className="mb-10 text-xl font-bold text-foreground">
-              Service Progress
+              Status Layanan
             </h2>
 
             {/* Horizontal Stepper */}
@@ -40,10 +40,10 @@ export default function ServiceDetail() {
                   </div>
                   <div className="flex flex-col items-center text-center">
                     <span className="text-xs font-bold text-foreground sm:text-sm">
-                      Confirmed
+                      Dikonfirmasi
                     </span>
                     <span className="text-[10px] text-muted-foreground sm:text-xs">
-                      10:30 AM
+                      10:30 WITA
                     </span>
                   </div>
                 </div>
@@ -55,10 +55,10 @@ export default function ServiceDetail() {
                   </div>
                   <div className="flex flex-col items-center text-center">
                     <span className="text-xs font-bold text-foreground sm:text-sm">
-                      Technician Assigned
+                      Teknisi Didapat
                     </span>
                     <span className="text-[10px] text-muted-foreground sm:text-xs">
-                      11:15 AM
+                      11:15 WITA
                     </span>
                   </div>
                 </div>
@@ -70,10 +70,10 @@ export default function ServiceDetail() {
                   </div>
                   <div className="flex flex-col items-center text-center">
                     <span className="text-xs font-bold text-primary sm:text-sm">
-                      On the Way
+                      Menuju Lokasi
                     </span>
                     <span className="text-[10px] italic text-muted-foreground sm:text-xs">
-                      Estimated 12:45 PM
+                      Estimasi 12:45 WITA
                     </span>
                   </div>
                 </div>
@@ -85,7 +85,7 @@ export default function ServiceDetail() {
                   </div>
                   <div className="flex flex-col items-center text-center opacity-50">
                     <span className="text-xs font-medium text-muted-foreground sm:text-sm">
-                      Job Completed
+                      Selesai
                     </span>
                   </div>
                 </div>
@@ -102,13 +102,11 @@ export default function ServiceDetail() {
               <div className="mb-4 flex items-center gap-3 text-primary">
                 <FileText className="h-5 w-5 text-slate-500" />
                 <h3 className="text-base font-bold text-foreground">
-                  Problem Description
+                  Detail Masalah
                 </h3>
               </div>
               <p className="text-sm leading-relaxed text-slate-600 dark:text-muted-foreground">
-                Indoor unit making loud rattling noise and not cooling
-                effectively. Occasional water leakage from the bottom right
-                corner. Brand: Sharp J-Tech Inverter 1.5PK.
+                Unit indoor berisik dan tidak dingin maksimal. Kadang bocor di sudut kanan bawah. Merek: Sharp J-Tech Inverter 1.5PK.
               </p>
             </CardContent>
           </Card>
@@ -119,12 +117,11 @@ export default function ServiceDetail() {
               <div className="mb-4 flex items-center gap-3 text-primary">
                 <MapPin className="h-5 w-5 text-primary" />
                 <h3 className="text-base font-bold text-foreground">
-                  Service Location
+                  Alamat Layanan
                 </h3>
               </div>
               <p className="mb-4 text-sm leading-relaxed text-slate-600 dark:text-muted-foreground">
-                Apartemen Green Park, Tower A, Unit 12B. Kebayoran Lama, Jakarta
-                Selatan.
+                Apartemen Green Park, Tower A, Unit 12B. Kebayoran Lama, Jakarta Selatan.
               </p>
               {/* Map Placeholder */}
               <div className="mt-auto h-24 w-full overflow-hidden rounded-xl bg-slate-200 opacity-80 mix-blend-multiply dark:bg-muted/50 dark:mix-blend-normal">
@@ -145,7 +142,7 @@ export default function ServiceDetail() {
         <Card className="border-none shadow-sm sm:rounded-3xl">
           <CardContent className="p-6 sm:p-8">
             <span className="mb-4 block text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
-              Assigned Technician
+              Info Teknisi
             </span>
 
             <div className="mb-6 flex items-center gap-4">
@@ -166,17 +163,17 @@ export default function ServiceDetail() {
                 <div className="mt-0.5 flex items-center gap-1 text-sm text-muted-foreground">
                   <Star className="h-4 w-4 fill-accent text-accent" />
                   <span className="font-bold text-foreground">4.9</span>
-                  <span>(124 reviews)</span>
+                  <span>(124 ulasan)</span>
                 </div>
               </div>
             </div>
 
             <Button className="w-full rounded-full bg-[#0066A2] py-6 text-base font-semibold shadow-md hover:bg-[#005587]">
-              <MessageCircle className="mr-2 h-5 w-5" /> WhatsApp Technician
+              <MessageCircle className="mr-2 h-5 w-5" /> WhatsApp Teknisi
             </Button>
 
             <p className="mt-4 text-center text-[11px] leading-relaxed text-muted-foreground">
-              Standard rates apply. Direct communication for arrival time.
+              Tarif standar berlaku. Komunikasi langsung untuk waktu kedatangan.
             </p>
           </CardContent>
         </Card>
@@ -185,16 +182,16 @@ export default function ServiceDetail() {
         <Card className="border-none bg-slate-50 shadow-none dark:bg-muted/10 sm:rounded-3xl">
           <CardContent className="p-6 sm:p-8">
             <h3 className="mb-6 text-base font-bold text-foreground">
-              Cost Summary
+              Ringkasan Biaya
             </h3>
 
             <div className="mb-4 flex flex-col gap-3 text-sm">
               <div className="flex justify-between text-muted-foreground">
-                <span>Service Fee</span>
+                <span>Biaya Servis</span>
                 <span className="font-medium text-foreground">Rp 150.000</span>
               </div>
               <div className="flex justify-between text-muted-foreground">
-                <span>Transportation</span>
+                <span>Transport</span>
                 <span className="font-medium text-foreground">Rp 25.000</span>
               </div>
             </div>
@@ -202,7 +199,7 @@ export default function ServiceDetail() {
             <hr className="my-4 border-muted" />
 
             <div className="flex justify-between">
-              <span className="font-bold text-foreground">Total Amount</span>
+              <span className="font-bold text-foreground">Total Tagihan</span>
               <span className="text-lg font-bold text-primary">Rp 175.000</span>
             </div>
           </CardContent>

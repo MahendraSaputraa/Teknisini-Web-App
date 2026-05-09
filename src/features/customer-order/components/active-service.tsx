@@ -80,7 +80,7 @@ export default function ActiveService() {
             {/* Map/Gambar Kanan (Ambil 2 kolom) */}
             <div className="relative h-64 w-full overflow-hidden rounded-2xl bg-slate-200 lg:col-span-2 lg:h-full">
               <img
-                src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-9.jpg"
+                src="/images/TeknisiDatang-Teknisini.png"
                 alt="Tracking Map"
                 className="h-full w-full object-cover"
               />

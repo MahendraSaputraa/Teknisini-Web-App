@@ -25,7 +25,7 @@ export default function LeftForm() {
               <Building2 className="h-6 w-6" />
             </div>
             <h3 className="text-lg font-bold text-foreground">
-              Bank Transfer Instructions
+              Panduan Transfer Bank
             </h3>
           </div>
 
@@ -34,7 +34,7 @@ export default function LeftForm() {
             <div className="flex flex-col gap-4">
               <div className="flex flex-col justify-between gap-1 sm:flex-row sm:items-center">
                 <span className="text-sm font-medium text-muted-foreground">
-                  Destination Bank
+                  Bank Tujuan
                 </span>
                 <span className="font-bold text-primary">
                   Bank Central Asia (BCA)
@@ -42,7 +42,7 @@ export default function LeftForm() {
               </div>
               <div className="flex flex-col justify-between gap-1 sm:flex-row sm:items-center">
                 <span className="text-sm font-medium text-muted-foreground">
-                  Account Name
+                  Atas Nama (A.N.)
                 </span>
                 <span className="font-bold text-foreground">
                   PT TEKNISINI DIGITAL INDONESIA
@@ -50,7 +50,7 @@ export default function LeftForm() {
               </div>
               <div className="flex flex-col justify-between gap-1 sm:flex-row sm:items-center">
                 <span className="text-sm font-medium text-muted-foreground">
-                  Account Number
+                  No. Rekening
                 </span>
                 <div className="flex items-center gap-2">
                   <span className="text-xl font-extrabold tracking-widest text-foreground">
@@ -69,13 +69,13 @@ export default function LeftForm() {
             <div className="flex items-start gap-3 rounded-xl border border-muted p-4">
               <Info className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
               <p className="text-sm leading-relaxed text-muted-foreground">
-                Transfer the exact amount including the unique code if provided.
+                Transfer tepat sesuai tagihan beserta kode unik (jika ada).
               </p>
             </div>
             <div className="flex items-start gap-3 rounded-xl border border-muted p-4">
               <Clock className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
               <p className="text-sm leading-relaxed text-muted-foreground">
-                Payment must be completed within 2 hours of booking.
+                Batas waktu pembayaran adalah 2 jam sejak pesanan dibuat.
               </p>
             </div>
           </div>
@@ -85,12 +85,12 @@ export default function LeftForm() {
       {/* 2. Payment Proof Upload */}
       <Card className="border-none shadow-sm sm:rounded-2xl">
         <CardContent className="p-6 sm:p-8">
-          <h3 className="mb-6 text-lg font-bold text-foreground">
-            Payment Proof
-          </h3>
+          {/* <h3 className="mb-6 text-lg font-bold text-foreground">
+            Bukti Pembayaran
+          </h3> */}
 
           <Dropzone
-            title="Payment Proof"
+            title="Bukti Pembayaran"
             onFileSelect={handleFileSelect}
             accept={{ "image/*": [] }}
           />

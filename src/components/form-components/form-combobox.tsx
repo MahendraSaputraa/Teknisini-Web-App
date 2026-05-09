@@ -34,10 +34,11 @@ export interface FormComboBoxProps {
   className?: string;
   required?: boolean;
   value?: string | number | null;
-  onChange?: (value: string | number | null) => void;
+  onChange?: (option: ComboBoxOption | null) => void; // Ubah ini
   options?: ComboBoxOption[];
   placeholder?: string;
   isLoading?: boolean;
+  disabled?: boolean;
 }
 
 export function FormComboBox({
@@ -52,6 +53,7 @@ export function FormComboBox({
   options = [],
   placeholder = "Pilih...",
   isLoading,
+  disabled,
 }: FormComboBoxProps) {
   const [open, setOpen] = React.useState(false);
 
@@ -78,6 +80,7 @@ export function FormComboBox({
               error && "border-red-500",
               className,
             )}
+            disabled={disabled}
           >
             {selectedLabel || placeholder}
 
@@ -129,7 +132,7 @@ export function FormComboBox({
                       value={`${option.label} ${option.value}`}
                       className="relative pr-8"
                       onSelect={() => {
-                        onChange?.(option.value);
+                        onChange?.(option);
                         setOpen(false);
                       }}
                     >

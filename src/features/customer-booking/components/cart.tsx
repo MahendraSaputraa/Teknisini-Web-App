@@ -1,11 +1,12 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { formatRupiah } from "@/lib/utils";
 import { ArrowRight, Award, Clock, Info, ShieldCheck } from "lucide-react";
-import { useRouter } from "next/navigation";
 
-export default function Cart({ handleSubmit, isPending }: any) {
-  const route = useRouter();
+export default function Cart({ handleSubmit, isPending, formData }: any) {
+  const PLATFORM_FEE = 0.25;
+  const TRANSPORT = 25000;
   return (
     <div className="flex w-full flex-col gap-6 lg:sticky lg:top-24 lg:w-1/3">
       <Card className="border-none shadow-md sm:rounded-3xl">
@@ -18,11 +19,16 @@ export default function Cart({ handleSubmit, isPending }: any) {
           <div className="mb-4 flex flex-col gap-3 text-sm">
             <div className="flex justify-between text-muted-foreground">
               <span>Biaya Layanan</span>
-              <span className="font-semibold text-foreground">Rp 150.000</span>
+              <span className="font-semibold text-foreground">
+                {formatRupiah(
+                  formData?.price_service +
+                    formData?.price_service * PLATFORM_FEE,
+                )}
+              </span>
             </div>
             <div className="flex justify-between text-muted-foreground">
               <span className="flex items-center gap-1">
-                Tranport <Info className="h-3 w-3" />
+                Transport <Info className="h-3 w-3" />
               </span>
               <span className="font-semibold text-foreground">Rp 25.000</span>
             </div>
@@ -36,11 +42,12 @@ export default function Cart({ handleSubmit, isPending }: any) {
               Total Pembayaran
             </span>
             <div className="flex flex-col items-end">
-              <span className="text-[10px] font-bold uppercase tracking-wider text-primary">
-                Total Est.
-              </span>
               <span className="text-2xl font-bold text-primary">
-                Rp 175.000
+                {formatRupiah(
+                  formData?.price_service +
+                    TRANSPORT +
+                    formData?.price_service * PLATFORM_FEE,
+                )}
               </span>
             </div>
           </div>

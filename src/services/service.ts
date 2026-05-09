@@ -21,7 +21,7 @@ export interface GetServicesParams {
 
 export const getServices = async (params?: GetServicesParams) => {
   const res = await api.get("/services", { params });
-  return res.data.data as Service[];
+  return res.data;
 };
 
 /**
@@ -55,7 +55,7 @@ export const createService = async (payload: CreateServicePayload) => {
 
 export const updateService = async (
   id: string,
-  payload: Partial<CreateServicePayload>
+  payload: Partial<CreateServicePayload>,
 ) => {
   const res = await api.patch(`/services/${id}`, payload);
   return res.data.data as Service;

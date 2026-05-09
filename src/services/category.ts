@@ -12,11 +12,9 @@ export interface Category {
 
 // ─── Baca ─────────────────────────────────────────────────────────────────────
 
-export const getCategories = async (onlyActive = true) => {
-  const res = await api.get("/categories", {
-    params: onlyActive ? { active: "true" } : {},
-  });
-  return res.data.data as Category[];
+export const getCategories = async () => {
+  const res = await api.get("/categories");
+  return res.data;
 };
 
 export const getCategoryById = async (id: string) => {
@@ -40,7 +38,7 @@ export const createCategory = async (payload: CreateCategoryPayload) => {
 
 export const updateCategory = async (
   id: string,
-  payload: Partial<CreateCategoryPayload>
+  payload: Partial<CreateCategoryPayload>,
 ) => {
   const res = await api.patch(`/categories/${id}`, payload);
   return res.data.data as Category;

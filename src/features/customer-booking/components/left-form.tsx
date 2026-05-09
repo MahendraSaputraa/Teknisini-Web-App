@@ -26,7 +26,12 @@ const DUMMY_OPTIONS: ComboBoxOption[] = [
   { label: "Opsi 2", value: "opt2" },
 ];
 
-export default function LeftForm({ setFormData, formData }: any) {
+export default function LeftForm({
+  setFormData,
+  formData,
+  optionsCategory,
+  optionsService,
+}: any) {
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
@@ -79,13 +84,13 @@ export default function LeftForm({ setFormData, formData }: any) {
               required
             />
             <FormInput
-              name="whatsapp" // WAJIB DIISI
+              name="user_phone" // WAJIB DIISI
               className="h-12"
-              label="Whatsapp"
-              placeholder="Masukan nomor Whatsapp"
-              value={formData.whatsapp}
+              label="Nomor Telepon"
+              placeholder="Masukan nomor Telepon"
+              value={formData.user_phone}
               onChange={(e) =>
-                setFormData((p: any) => ({ ...p, whatsapp: e.target.value }))
+                setFormData((p: any) => ({ ...p, user_phone: e.target.value }))
               }
               required
             />
@@ -104,26 +109,40 @@ export default function LeftForm({ setFormData, formData }: any) {
           </div>
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
             <FormComboBox
-              name="category" // WAJIB DIISI
+              name="category_id" // WAJIB DIISI
               label="Kategori"
               placeholder="Pilih kategori..."
-              options={DUMMY_OPTIONS}
-              value={formData.category}
-              onChange={(val) =>
-                setFormData((p: any) => ({ ...p, category: String(val) }))
+              options={optionsCategory}
+              value={formData.category_id}
+              onChange={(opt) =>
+                setFormData((p: any) => ({
+                  ...p,
+                  category_id: opt ? String(opt.value) : "",
+                  service_name: "",
+                }))
               }
               required
             />
             <FormComboBox
-              name="service" // WAJIB DIISI
+              name="service_id" // WAJIB DIISI
               label="Layanan Spesifik"
               placeholder="Pilih layanan..."
-              options={DUMMY_OPTIONS}
-              value={formData.service}
-              onChange={(val) =>
-                setFormData((p: any) => ({ ...p, service: String(val) }))
+              options={optionsService}
+              value={formData.service_id}
+              onChange={(opt) =>
+                setFormData((p: any) => ({
+                  ...p,
+                  service_name: opt ? String(opt.label) : "",
+                  service_id: opt ? String(opt.value) : "",
+                  price_service: opt
+                    ? (optionsService?.find(
+                        (item: any) => item.value === opt.value,
+                      )?.price ?? 0)
+                    : 0,
+                }))
               }
               required
+              disabled={!formData?.category_id}
             />
           </div>
           <FormTextarea

@@ -3,11 +3,11 @@ import { z } from "zod";
 export const createOrderSchema = z.object({
   // Informasi Pelanggan
   name: z.string().min(1, "Nama lengkap harus diisi"),
-  whatsapp: z.string().min(10, "Nomor Whatsapp minimal 10 digit"),
+  user_phone: z.string().min(10, "Nomor minimal 10 digit"),
 
   // Detail Layanan
-  category: z.string().min(1, "Pilih kategori layanan"),
-  service: z.string().min(1, "Pilih layanan spesifik"),
+  category_id: z.string().min(1, "Pilih kategori layanan"),
+  service_id: z.string().min(1, "Pilih layanan spesifik"),
   notes: z.string().optional(),
 
   // Lokasi (Sesuai kebutuhan API)

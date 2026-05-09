@@ -24,7 +24,7 @@ const steps = [
 
 export default function StepSection() {
   return (
-    <section className="w-full bg-background py-20 md:py-28">
+    <section id="step" className="w-full bg-background py-20 md:py-28">
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 items-center gap-16 lg:grid-cols-2 lg:gap-20">
           {/* Kiri: Bagian Gambar */}

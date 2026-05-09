@@ -123,14 +123,14 @@ export default function ServiceDetail() {
               <p className="mb-4 text-sm leading-relaxed text-slate-600 dark:text-muted-foreground">
                 Apartemen Green Park, Tower A, Unit 12B. Kebayoran Lama, Jakarta Selatan.
               </p>
-              {/* Map Placeholder */}
+              {/* Map Placeholder
               <div className="mt-auto h-24 w-full overflow-hidden rounded-xl bg-slate-200 opacity-80 mix-blend-multiply dark:bg-muted/50 dark:mix-blend-normal">
                 <img
                   src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-9.jpg"
                   alt="Map"
                   className="h-full w-full object-cover"
                 />
-              </div>
+              </div> */}
             </CardContent>
           </Card>
         </div>

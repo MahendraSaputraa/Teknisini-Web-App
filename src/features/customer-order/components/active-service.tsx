@@ -86,7 +86,7 @@ export default function ActiveService() {
               />
 
               {/* Floating Jarak Badge */}
-              <div className="absolute bottom-4 left-4 right-4 flex items-center gap-3 rounded-xl bg-background/95 p-3 shadow-lg backdrop-blur-sm sm:left-auto sm:right-6 sm:w-auto">
+              {/* <div className="absolute bottom-4 left-4 right-4 flex items-center gap-3 rounded-xl bg-background/95 p-3 shadow-lg backdrop-blur-sm sm:left-auto sm:right-6 sm:w-auto">
                 <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 text-primary">
                   <MapPin className="h-4 w-4" />
                 </div>
@@ -98,7 +98,7 @@ export default function ActiveService() {
                     1.2 km lagi
                   </span>
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
         </CardContent>

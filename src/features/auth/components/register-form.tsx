@@ -44,7 +44,7 @@ export function SignupForm({
           <form className="p-6 md:p-8" onSubmit={handleSubmit}>
             <FieldGroup>
               <div className="flex flex-col items-center gap-2 text-center">
-                <h1 className="text-2xl font-bold">Create your account</h1>
+                <h1 className="text-2xl font-bold">Buat Akun Anda</h1>
                 <p className="text-sm text-balance text-muted-foreground">
                   Daftar akun baru TekniSini
                 </p>
@@ -53,7 +53,7 @@ export function SignupForm({
                 label="Nama"
                 name="name"
                 type="text"
-                placeholder="Ide bagus"
+                placeholder="cth. Budi Santoso"
                 required
                 value={registerPayload.name}
                 onChange={(e) =>
@@ -68,7 +68,7 @@ export function SignupForm({
                 label="Email"
                 name="email"
                 type="email"
-                placeholder="m@example.com"
+                placeholder="m@contoh.com"
                 required
                 value={registerPayload.email}
                 onChange={(e) =>
@@ -80,10 +80,10 @@ export function SignupForm({
                 error={errors?.email?.[0]}
               />
               <FormInput
-                label="Telfun"
+                label="Telepon WA Aktif"
                 name="phone"
                 type="number"
-                placeholder="0089123456788"
+                placeholder="cth. 08123456789"
                 required
                 value={registerPayload.phone}
                 onChange={(e) =>
@@ -112,17 +112,17 @@ export function SignupForm({
 
               <Field>
                 <Button disabled={mutation.isPending} type="submit">
-                  {mutation.isPending ? <Spinner /> : "Sigin"}
+                  {mutation.isPending ? <Spinner /> : "Daftar"}
                 </Button>
               </Field>
               <FieldDescription className="text-center">
-                Already have an account? <a href="/login">Sign in</a>
+                Sudah memiliki akun? <a href="/login">Masuk disini</a>
               </FieldDescription>
             </FieldGroup>
           </form>
           <div className="relative hidden bg-muted md:block">
             <img
-              src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-9.jpg"
+              src="/images/image-register.jpg"
               alt="Image"
               className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
             />
@@ -130,8 +130,8 @@ export function SignupForm({
         </CardContent>
       </Card>
       <FieldDescription className="px-6 text-center">
-        By clicking continue, you agree to our <a href="#">Terms of Service</a>{" "}
-        and <a href="#">Privacy Policy</a>.
+        Dengan mengeklik lanjutkan, Anda menyetujui <a href="#">Ketentuan Layanan</a>{" "}
+        dan <a href="#">Kebijakan Privasi</a> kami.
       </FieldDescription>
     </div>
   );

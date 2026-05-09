@@ -38,7 +38,7 @@ const features = [
 export default function WhySection() {
   return (
     // Background section sedikit abu-abu agar card putih lebih menonjol
-    <section className="w-full bg-slate-50 py-20 dark:bg-muted/20">
+    <section id="layanan" className="w-full bg-slate-50 py-20 dark:bg-muted/20">
       <div className="container mx-auto px-4">
         
         {/* Header Section */}

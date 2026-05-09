@@ -14,7 +14,7 @@ export default function Footer() {
           <div className="flex flex-col gap-4">
             <h2 className="text-xl font-bold text-foreground">TekniSini</h2>
             <p className="max-w-xs text-sm leading-relaxed text-muted-foreground">
-              Digital Concierge for Technical Excellence. Menghubungkan Anda dengan keahlian teknis terbaik.
+              Solusi digital untuk layanan teknis terbaik. Menghubungkan Anda dengan keahlian teknis terbaik kami.
             </p>
           </div>
 
@@ -24,17 +24,22 @@ export default function Footer() {
             <ul className="flex flex-col gap-3">
               <li>
                 <Link href="#" className="text-sm text-muted-foreground transition-colors hover:text-primary">
-                  About Us
+                  Tentang Kami
                 </Link>
               </li>
               <li>
                 <Link href="#" className="text-sm text-muted-foreground transition-colors hover:text-primary">
-                  Technical Briefs
+                  Cara Kerja
                 </Link>
               </li>
               <li>
                 <Link href="#" className="text-sm text-muted-foreground transition-colors hover:text-primary">
-                  Pricing
+                  Buat Pesanan
+                </Link>
+              </li>
+              <li>
+                <Link href="#" className="text-sm text-muted-foreground transition-colors hover:text-primary">
+                  Pesanan Saya
                 </Link>
               </li>
             </ul>
@@ -84,7 +89,7 @@ export default function Footer() {
             
             {/* Copyright */}
             <p className="mt-4 text-xs text-muted-foreground md:mt-8">
-              © 2024 TekniSini. The Digital Concierge for Technical Excellence.
+              © 2026 TekniSini. Solusi Digital untuk Layanan Teknis Terbaik.
             </p>
           </div>
 

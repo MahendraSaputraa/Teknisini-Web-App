@@ -1,18 +1,16 @@
 "use client";
 
-import {
-  ComboBoxOption,
-  FormComboBox,
-} from "@/components/form-components/form-combobox";
-import { FormInput } from "@/components/form-components/form-input";
-import { FormTextarea } from "@/components/form-components/form-textarea";
-import { Card, CardContent } from "@/components/ui/card";
-import { User, Wrench, MapPin } from "lucide-react";
 import { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
-import { createOrderSchema } from "../schema";
-import { useCreateOrder } from "../hooks/use-create-order";
-import { toast } from "sonner";
+import { User, Wrench, MapPin } from "lucide-react";
+
+import { Card, CardContent } from "@/components/ui/card";
+import { FormInput } from "@/components/form-components/form-input";
+import { FormTextarea } from "@/components/form-components/form-textarea";
+import {
+  FormComboBox,
+  ComboBoxOption,
+} from "@/components/form-components/form-combobox";
 
 const MapPicker = dynamic(() => import("./map-picker"), {
   ssr: false,
@@ -23,34 +21,22 @@ const MapPicker = dynamic(() => import("./map-picker"), {
   ),
 });
 
-export default function LeftForm() {
-  const [formData, setFormData] = useState({
-    name: "Budi in Bali",
-    whatsapp: "089821213121341",
-    category: "",
-    service: "",
-    notes: "",
-    location: { lat: -8.65, lng: 115.216667 },
-    address: "",
-  });
-  const { mutate: createOrder, isPending } = useCreateOrder();
+const DUMMY_OPTIONS: ComboBoxOption[] = [
+  { label: "Opsi 1", value: "opt1" },
+  { label: "Opsi 2", value: "opt2" },
+];
 
-  const DUMMY_OPTIONS: ComboBoxOption[] = [
-    { label: "Opsi 1", value: "opt1" },
-    { label: "Opsi 2", value: "opt2" },
-  ];
-  const [kategori, setKategori] = useState<string | number | null>(null);
-  const [layananSpesifik, setLayananSpesifik] = useState<
-    string | number | null
-  >(null);
-  const [catatan, setCatatan] = useState("");
-
-  const [location, setLocation] = useState({ lat: -8.65, lng: 115.216667 });
-  const [alamatText, setAlamatText] = useState(
-    "Geser pin pada peta untuk menentukan lokasi...",
-  );
+export default function LeftForm({ setFormData, formData }: any) {
+  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
+    setIsMounted(true);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    if (!isMounted) return;
+
     const fetchAddress = async () => {
       try {
         const res = await fetch(
@@ -58,28 +44,17 @@ export default function LeftForm() {
         );
         const data = await res.json();
         if (data?.display_name) {
-          setFormData((prev) => ({ ...prev, address: data.display_name }));
+          setFormData((prev: any) => ({ ...prev, address: data.display_name }));
         }
       } catch (e) {
-        console.error(e);
+        console.error("Gagal mengambil alamat:", e);
       }
     };
+
     const timeout = setTimeout(fetchAddress, 800);
     return () => clearTimeout(timeout);
-  }, [formData.location]);
+  }, [formData.location.lat, formData.location.lng, isMounted]);
 
-  const handleSubmit = () => {
-    // Validasi dengan Zod sebelum push
-    const validation = createOrderSchema.safeParse(formData);
-
-    if (!validation.success) {
-      const firstError = validation.error.errors[0].message;
-      return toast.error("Validasi Gagal", { description: firstError });
-    }
-
-    // Hit Endpoint
-    createOrder(formData);
-  };
   return (
     <div className="flex w-full flex-col gap-6 lg:w-2/3">
       {/* 1. Card Informasi Pelanggan */}
@@ -93,20 +68,26 @@ export default function LeftForm() {
           </div>
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
             <FormInput
-              name="name"
+              name="name" // WAJIB DIISI
+              className="h-12"
               label="Nama Lengkap"
+              placeholder="Masukan nama pelanggan"
               value={formData.name}
               onChange={(e) =>
-                setFormData({ ...formData, name: e.target.value })
+                setFormData((p: any) => ({ ...p, name: e.target.value }))
               }
+              required
             />
             <FormInput
-              name="whatsapp"
+              name="whatsapp" // WAJIB DIISI
+              className="h-12"
               label="Whatsapp"
+              placeholder="Masukan nomor Whatsapp"
               value={formData.whatsapp}
               onChange={(e) =>
-                setFormData({ ...formData, whatsapp: e.target.value })
+                setFormData((p: any) => ({ ...p, whatsapp: e.target.value }))
               }
+              required
             />
           </div>
         </CardContent>
@@ -123,33 +104,36 @@ export default function LeftForm() {
           </div>
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
             <FormComboBox
+              name="category" // WAJIB DIISI
               label="Kategori"
-              name="kategori"
-              placeholder="Pilih kategori layanan..."
-              className="h-12"
+              placeholder="Pilih kategori..."
               options={DUMMY_OPTIONS}
-              value={kategori}
-              onChange={(val) => setKategori(val)}
+              value={formData.category}
+              onChange={(val) =>
+                setFormData((p: any) => ({ ...p, category: String(val) }))
+              }
               required
             />
             <FormComboBox
+              name="service" // WAJIB DIISI
               label="Layanan Spesifik"
-              name="layananSpesifik"
-              placeholder="Pilih layanan spesifik..."
-              className="h-12"
+              placeholder="Pilih layanan..."
               options={DUMMY_OPTIONS}
-              value={layananSpesifik}
-              onChange={(val) => setLayananSpesifik(val)}
+              value={formData.service}
+              onChange={(val) =>
+                setFormData((p: any) => ({ ...p, service: String(val) }))
+              }
               required
             />
           </div>
           <FormTextarea
+            name="notes" // WAJIB DIISI
             label="Catatan Tambahan"
-            name="catatan"
-            placeholder="Tuliskan instruksi atau pesan khusus di sini..."
-            value={catatan}
-            onChange={(e) => setCatatan(e.target.value)}
-            required={true}
+            placeholder="Tuliskan instruksi khusus di sini..."
+            value={formData.notes}
+            onChange={(e) =>
+              setFormData((p: any) => ({ ...p, notes: e.target.value }))
+            }
             rows={5}
           />
         </CardContent>
@@ -166,19 +150,23 @@ export default function LeftForm() {
           </div>
 
           <FormInput
+            name="address" // WAJIB DIISI
             className="h-12 bg-slate-50 dark:bg-slate-900 text-slate-500"
-            label={`Alamat Lengkap (Lat: ${location.lat.toFixed(5)}, Lng: ${location.lng.toFixed(5)})`}
-            name="alamat"
-            type="text"
-            placeholder="Mencari alamat..."
-            value={alamatText}
-            onChange={() => {}} // Sengaja dikosongkan karena readonly
-            readOnly={true}
+            label={`Alamat (Lat: ${formData.location.lat.toFixed(5)}, Lng: ${formData.location.lng.toFixed(5)})`}
+            value={formData.address}
+            readOnly
             required
           />
 
-          <div className="mt-4 w-full overflow-hidden rounded-xl   relative z-0">
-            <MapPicker position={location} onPositionChange={setLocation} />
+          <div className="mt-4 h-[350px] w-full overflow-hidden rounded-xl relative z-0 border border-slate-200">
+            {isMounted && (
+              <MapPicker
+                position={formData.location}
+                onPositionChange={(pos) =>
+                  setFormData((p: any) => ({ ...p, location: pos }))
+                }
+              />
+            )}
           </div>
         </CardContent>
       </Card>

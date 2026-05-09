@@ -4,7 +4,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { ArrowRight, Award, Clock, Info, ShieldCheck } from "lucide-react";
 import { useRouter } from "next/navigation";
 
-export default function Cart() {
+export default function Cart({ handleSubmit, isPending }: any) {
   const route = useRouter();
   return (
     <div className="flex w-full flex-col gap-6 lg:sticky lg:top-24 lg:w-1/3">
@@ -50,13 +50,15 @@ export default function Cart() {
             <ShieldCheck className="h-5 w-5 shrink-0" />
             <p className="leading-relaxed">
               Transaksi aman. Pembayaran hanya akan diteruskan ke teknisi
-              setelah pengerjaan selesai Anda konfirmasi atau setelah 24 jam dari pekerjaan selesai. 
+              setelah pengerjaan selesai Anda konfirmasi atau setelah 24 jam
+              dari pekerjaan selesai.
             </p>
           </div>
 
           {/* Tombol Kirim */}
           <Button
-            onClick={() => route.push("/customer/payment")}
+            disabled={isPending}
+            onClick={handleSubmit}
             className="h-14 w-full rounded-full bg-primary text-base font-semibold text-primary-foreground shadow-lg shadow-primary/30 hover:bg-primary/90"
           >
             Kirim Permintaan <ArrowRight className="ml-2 h-5 w-5" />

@@ -13,7 +13,7 @@ export default function Hero() {
           <div className="flex flex-col items-start gap-6">
             {/* Badge Premium */}
             <div className="inline-flex items-center rounded-md bg-primary/10 px-3 py-1.5 text-xs font-bold tracking-wide text-primary uppercase">
-              Premium Technical Service
+              Layanan Teknis Premium
             </div>
 
             {/* Headline */}

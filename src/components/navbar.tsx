@@ -135,7 +135,11 @@ export default function Navbar({ user }: any) {
             >
               <SheetHeader className=" px-0 text-left border-b">
                 <SheetTitle className="text-primary font-bold">
-                  TekniSini
+                  <Link
+                    href="/"
+                  >
+                    <img className="h-6" src="/images/logo-TekniSini.png" alt="" />
+                   </Link>
                 </SheetTitle>
               </SheetHeader>
 

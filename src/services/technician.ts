@@ -1,7 +1,16 @@
 import api from "@/lib/axios";
 
-export const getTechnicians = async (params: any) => {
+export interface GetTechniciansParams {
+  status?: "available" | "busy" | "suspended";
+}
+
+export const getTechnicians = async (params?: GetTechniciansParams) => {
   const res = await api.get("/technicians", { params });
+  return res.data;
+};
+
+export const getTechnicianById = async (id: string) => {
+  const res = await api.get(`/technicians/${id}`);
   return res.data;
 };
 
@@ -11,11 +20,11 @@ export const createTechnician = async (payload: any) => {
 };
 
 export const updateTechnician = async (id: string, payload: any) => {
-  const res = await api.put(`/admin/users/${id}`, payload);
+  const res = await api.patch(`/technicians/${id}`, payload);
   return res.data;
 };
 
 export const deleteTechnician = async (id: string) => {
-  const res = await api.delete(`/admin/users/${id}`);
+  const res = await api.delete(`/technicians/${id}`);
   return res.data;
 };

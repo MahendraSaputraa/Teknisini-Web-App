@@ -169,12 +169,30 @@ export async function createOrder(input: CreateOrderInput) {
   return mapOrderDoc(createdOrder)
 }
 
-export async function listOrders() {
-  const snapshot = await db
+export interface ListOrdersFilter {
+  user_id?: string
+  status?: OrderStatus
+  payment_status?: PaymentStatus
+}
+
+export async function listOrders(filter?: ListOrdersFilter) {
+  let query: FirebaseFirestore.Query = db
     .collection(ORDER_COLLECTION)
     .orderBy("created_at", "desc")
-    .get()
 
+  if (filter?.user_id) {
+    query = query.where("user_id", "==", filter.user_id)
+  }
+
+  if (filter?.status) {
+    query = query.where("status", "==", filter.status)
+  }
+
+  if (filter?.payment_status) {
+    query = query.where("payment_status", "==", filter.payment_status)
+  }
+
+  const snapshot = await query.get()
   return snapshot.docs.map(mapOrderDoc)
 }
 

@@ -1,7 +1,10 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
+
 
 export default function CtaSection() {
+  const route = useRouter();
   return (
     <section className="w-full bg-background py-16 md:py-24">
       <div className="container mx-auto px-4">
@@ -31,7 +34,9 @@ export default function CtaSection() {
             {/* Tombol Aksi */}
             <div className="flex w-full flex-col items-center justify-center gap-4 sm:w-auto sm:flex-row">
               {/* Tombol Putih (Mulai Sekarang) */}
-              <Button className="w-full h-13 rounded-full bg-primary-foreground px-8 text-base font-semibold text-primary shadow-md transition-all hover:bg-primary-foreground/90 sm:w-auto">
+              <Button 
+                onClick={() => route.push("/customer/booking")}
+                className="w-full h-13 rounded-full bg-primary-foreground px-8 text-base font-semibold text-primary shadow-md transition-all hover:bg-primary-foreground/90 sm:w-auto">
                 Mulai Sekarang
               </Button>
 

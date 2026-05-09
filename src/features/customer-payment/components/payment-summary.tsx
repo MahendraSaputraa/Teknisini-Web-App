@@ -32,21 +32,21 @@ export default function PaymentSummary() {
               <span className="font-medium text-muted-foreground">
                 Paket Perawatan Server
               </span>
-              <span className="font-bold text-foreground">Rp 1.250.000</span>
+              <span className="font-bold text-foreground">Rp1.250.000</span>
             </div>
             <div className="flex justify-between">
               <span className="font-medium text-muted-foreground">
                 Transport
               </span>
-              <span className="font-bold text-foreground">Rp 25.000</span>
+              <span className="font-bold text-foreground">Rp25.000</span>
             </div>
-            <div className="flex justify-between">
-              <span className="font-medium text-muted-foreground">
+            {/* <div className="flex justify-between"> */}
+              {/* <span className="font-medium text-muted-foreground">
                 Kode Unik
-              </span>
+              </span> */}
               {/* Menggunakan warna accent (orange) untuk unique code */}
-              <span className="font-bold text-accent">Rp 124</span>
-            </div>
+              {/* <span className="font-bold text-accent">Rp 124</span> */}
+            {/* </div> */}
           </div>
 
           <hr className="my-2 border-muted" />
@@ -58,7 +58,7 @@ export default function PaymentSummary() {
             </span>
             <div className="flex items-end justify-between">
               <span className="text-3xl font-extrabold text-foreground sm:text-4xl">
-                Rp 1.252.624
+                Rp1.275.000
               </span>
               <span className="mb-1 text-[10px] font-medium text-muted-foreground">
                 Tax Included

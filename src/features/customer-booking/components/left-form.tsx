@@ -10,6 +10,9 @@ import { Card, CardContent } from "@/components/ui/card";
 import { User, Wrench, MapPin } from "lucide-react";
 import { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
+import { createOrderSchema } from "../schema";
+import { useCreateOrder } from "../hooks/use-create-order";
+import { toast } from "sonner";
 
 const MapPicker = dynamic(() => import("./map-picker"), {
   ssr: false,
@@ -21,8 +24,16 @@ const MapPicker = dynamic(() => import("./map-picker"), {
 });
 
 export default function LeftForm() {
-  const [name, setName] = useState("Budi in Bali");
-  const [whatsapp, setWhatsapp] = useState("089821213121341");
+  const [formData, setFormData] = useState({
+    name: "Budi in Bali",
+    whatsapp: "089821213121341",
+    category: "",
+    service: "",
+    notes: "",
+    location: { lat: -8.65, lng: 115.216667 },
+    address: "",
+  });
+  const { mutate: createOrder, isPending } = useCreateOrder();
 
   const DUMMY_OPTIONS: ComboBoxOption[] = [
     { label: "Opsi 1", value: "opt1" },
@@ -42,28 +53,33 @@ export default function LeftForm() {
   useEffect(() => {
     const fetchAddress = async () => {
       try {
-        setAlamatText("Mencari alamat...");
         const res = await fetch(
-          `https://nominatim.openstreetmap.org/reverse?format=json&lat=${location.lat}&lon=${location.lng}`,
+          `https://nominatim.openstreetmap.org/reverse?format=json&lat=${formData.location.lat}&lon=${formData.location.lng}`,
         );
         const data = await res.json();
-        if (data && data.display_name) {
-          setAlamatText(data.display_name);
-        } else {
-          setAlamatText(
-            "Alamat tidak ditemukan. Pastikan pin berada di lokasi yang valid.",
-          );
+        if (data?.display_name) {
+          setFormData((prev) => ({ ...prev, address: data.display_name }));
         }
-      } catch (error) {
-        console.error("Gagal mendapatkan alamat:", error);
-        setAlamatText("Gagal mengambil alamat otomatis.");
+      } catch (e) {
+        console.error(e);
       }
     };
+    const timeout = setTimeout(fetchAddress, 800);
+    return () => clearTimeout(timeout);
+  }, [formData.location]);
 
-    const timeoutId = setTimeout(() => fetchAddress(), 800); // debounce 800ms biar nggak spam API
-    return () => clearTimeout(timeoutId);
-  }, [location.lat, location.lng]);
+  const handleSubmit = () => {
+    // Validasi dengan Zod sebelum push
+    const validation = createOrderSchema.safeParse(formData);
 
+    if (!validation.success) {
+      const firstError = validation.error.errors[0].message;
+      return toast.error("Validasi Gagal", { description: firstError });
+    }
+
+    // Hit Endpoint
+    createOrder(formData);
+  };
   return (
     <div className="flex w-full flex-col gap-6 lg:w-2/3">
       {/* 1. Card Informasi Pelanggan */}
@@ -77,24 +93,20 @@ export default function LeftForm() {
           </div>
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
             <FormInput
-              className="h-12"
-              label="Nama Lengkap"
               name="name"
-              type="text"
-              placeholder="Masukan nama pelanggan"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              required
+              label="Nama Lengkap"
+              value={formData.name}
+              onChange={(e) =>
+                setFormData({ ...formData, name: e.target.value })
+              }
             />
             <FormInput
-              className="h-12"
-              label="Whatsapp"
               name="whatsapp"
-              type="text"
-              placeholder="Masukan nomor Whatsapp"
-              value={whatsapp}
-              onChange={(e) => setWhatsapp(e.target.value)}
-              required
+              label="Whatsapp"
+              value={formData.whatsapp}
+              onChange={(e) =>
+                setFormData({ ...formData, whatsapp: e.target.value })
+              }
             />
           </div>
         </CardContent>

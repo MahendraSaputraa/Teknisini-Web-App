@@ -1,11 +1,11 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
-import { NavDocuments } from "@/components/nav-documents"
-import { NavMain } from "@/components/nav-main"
-import { NavSecondary } from "@/components/nav-secondary"
-import { NavUser } from "@/components/nav-user"
+import { NavDocuments } from "@/components/nav-documents";
+import { NavMain } from "@/components/nav-main";
+import { NavSecondary } from "@/components/nav-secondary";
+import { NavUser } from "@/components/nav-user";
 import {
   Sidebar,
   SidebarContent,
@@ -14,7 +14,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from "@/components/ui/sidebar"
+} from "@/components/ui/sidebar";
 import {
   LayoutDashboardIcon,
   UsersIcon,
@@ -22,6 +22,8 @@ import {
   CreditCard,
   Wrench,
   Receipt,
+  Workflow,
+  TagIcon,
 } from "lucide-react";
 
 const data = {
@@ -42,14 +44,14 @@ const data = {
       icon: <Wrench />,
     },
     {
-      title: "Payments",
-      url: "/admin/payment",
-      icon: <CreditCard />,
+      title: "Services",
+      url: "/admin/service",
+      icon: <Workflow />,
     },
     {
-      title: "Customer",
-      url: "/admin/customer",
-      icon: <UsersIcon />,
+      title: "Catagories",
+      url: "/admin/category",
+      icon: <TagIcon />,
     },
   ],
   // navClouds: [

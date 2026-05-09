@@ -22,6 +22,13 @@ export interface CreateTechnicianInput {
   total_reviews?: number
 }
 
+export interface UpdateTechnicianInput {
+  name?: string
+  phone?: string
+  category?: string
+  status?: TechnicianStatus
+}
+
 const TECHNICIAN_COLLECTION = "technicians"
 
 function mapTechnicianDoc(doc: FirebaseFirestore.DocumentSnapshot): Technician {
@@ -73,22 +80,6 @@ export async function ensureTechnicianAvailable(technicianId: string) {
   return technician
 }
 
-export async function updateTechnicianStatus(
-  technicianId: string,
-  status: TechnicianStatus
-) {
-  const technicianRef = db.collection(TECHNICIAN_COLLECTION).doc(technicianId)
-  const snapshot = await technicianRef.get()
-
-  if (!snapshot.exists) {
-    throw new AppError("Technician not found", 404)
-  }
-
-  await technicianRef.update({ status })
-  const updated = await technicianRef.get()
-  return mapTechnicianDoc(updated)
-}
-
 export async function createTechnician(input: CreateTechnicianInput) {
   const { name, phone, category } = input
 
@@ -108,4 +99,67 @@ export async function createTechnician(input: CreateTechnicianInput) {
   const docRef = await db.collection(TECHNICIAN_COLLECTION).add(payload)
   const created = await docRef.get()
   return mapTechnicianDoc(created)
+}
+
+export async function updateTechnicianStatus(
+  technicianId: string,
+  status: TechnicianStatus
+) {
+  const technicianRef = db.collection(TECHNICIAN_COLLECTION).doc(technicianId)
+  const snapshot = await technicianRef.get()
+
+  if (!snapshot.exists) {
+    throw new AppError("Technician not found", 404)
+  }
+
+  await technicianRef.update({ status })
+  const updated = await technicianRef.get()
+  return mapTechnicianDoc(updated)
+}
+
+export async function updateTechnician(
+  technicianId: string,
+  input: UpdateTechnicianInput
+) {
+  const technicianRef = db.collection(TECHNICIAN_COLLECTION).doc(technicianId)
+  const snapshot = await technicianRef.get()
+
+  if (!snapshot.exists) {
+    throw new AppError("Technician not found", 404)
+  }
+
+  const allowed: (keyof UpdateTechnicianInput)[] = ["name", "phone", "category", "status"]
+  const updates: Record<string, unknown> = {}
+  for (const key of allowed) {
+    if (input[key] !== undefined) {
+      updates[key] = input[key]
+    }
+  }
+
+  if (Object.keys(updates).length === 0) {
+    throw new AppError("No valid fields to update", 400)
+  }
+
+  await technicianRef.update(updates)
+  const updated = await technicianRef.get()
+  return mapTechnicianDoc(updated)
+}
+
+export async function deleteTechnician(technicianId: string) {
+  const technicianRef = db.collection(TECHNICIAN_COLLECTION).doc(technicianId)
+  const snapshot = await technicianRef.get()
+
+  if (!snapshot.exists) {
+    throw new AppError("Technician not found", 404)
+  }
+
+  const data = snapshot.data()!
+  if (data.status === "busy") {
+    throw new AppError(
+      "Cannot delete a technician that is currently busy on an order",
+      409
+    )
+  }
+
+  await technicianRef.delete()
 }

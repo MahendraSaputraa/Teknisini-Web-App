@@ -2,18 +2,16 @@
 import { Dropzone } from "@/components/form-components/form-dropzone";
 import { Card, CardContent } from "@/components/ui/card";
 import { Building2, Clock, CloudUpload, Copy, Info } from "lucide-react";
-import { useState } from "react";
+import { useParams } from "next/navigation";
 
-export default function LeftForm() {
-  const [fileReceipt, setFileReceipt] = useState<File | null>(null);
-  const handleFileSelect = (file: File | null) => {
-    setFileReceipt(file);
-    if (file) {
-      console.log("File yang dipilih:", file.name);
-    } else {
-      console.log("File dihapus");
-    }
-  };
+interface LeftFormProps {
+  fileReceipt: File | null;
+  onFileSelect: (file: File | null) => void;
+}
+
+export default function LeftForm({ fileReceipt, onFileSelect }: LeftFormProps) {
+  const params = useParams();
+  const orderId = params?.id as string;
   return (
     <div className="flex w-full flex-col gap-6 lg:w-3/5">
       {/* 1. Bank Transfer Instructions */}
@@ -85,15 +83,26 @@ export default function LeftForm() {
       {/* 2. Payment Proof Upload */}
       <Card className="border-none shadow-sm sm:rounded-2xl">
         <CardContent className="p-6 sm:p-8">
-          {/* <h3 className="mb-6 text-lg font-bold text-foreground">
-            Bukti Pembayaran
-          </h3> */}
-
           <Dropzone
             title="Bukti Pembayaran"
-            onFileSelect={handleFileSelect}
+            onFileSelect={onFileSelect}
             accept={{ "image/*": [] }}
           />
+
+          {/* File Info Preview */}
+          {fileReceipt && (
+            <div className="mt-6 flex items-center gap-2 rounded-lg border border-primary/20 bg-primary/5 p-3">
+              <CloudUpload className="h-5 w-5 text-primary" />
+              <div className="flex-1">
+                <p className="text-sm font-medium text-foreground">
+                  {fileReceipt.name}
+                </p>
+                <p className="text-xs text-muted-foreground">
+                  {(fileReceipt.size / 1024).toFixed(2)} KB
+                </p>
+              </div>
+            </div>
+          )}
         </CardContent>
       </Card>
     </div>

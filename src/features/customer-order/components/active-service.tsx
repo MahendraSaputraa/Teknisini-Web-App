@@ -3,9 +3,68 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { ArrowRight, Clock, MapPin, Star, Truck, User } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { formatRupiah } from "@/lib/utils";
 
-export default function ActiveService() {
+interface ActiveServiceProps {
+  data?: any;
+  isLoading?: boolean;
+}
+
+export default function ActiveService({
+  data = [],
+  isLoading = false,
+}: ActiveServiceProps) {
   const route = useRouter();
+
+  // Show loading state
+  if (isLoading) {
+    return (
+      <div className="mb-12">
+        <div className="mb-4 flex items-center gap-2 text-primary">
+          <div className="flex h-6 w-6 items-center justify-center rounded-full bg-primary/10">
+            <Star className="h-3.5 w-3.5 fill-primary" />
+          </div>
+          <h2 className="text-sm font-bold uppercase tracking-wider">
+            Layanan Aktif
+          </h2>
+        </div>
+        <Card className="overflow-hidden border-none bg-slate-50/50 shadow-sm ring-1 ring-slate-100 dark:bg-muted/10 dark:ring-muted/30 sm:rounded-3xl">
+          <CardContent className="p-6 sm:p-8">
+            <div className="h-40 w-full animate-pulse rounded-lg bg-slate-200 dark:bg-muted/30" />
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  // Show empty state if no active orders
+  if (!data || !data.id) {
+    return (
+      <div className="mb-12">
+        <div className="mb-4 flex items-center gap-2 text-primary">
+          <div className="flex h-6 w-6 items-center justify-center rounded-full bg-primary/10">
+            <Star className="h-3.5 w-3.5 fill-primary" />
+          </div>
+          <h2 className="text-sm font-bold uppercase tracking-wider">
+            Layanan Aktif
+          </h2>
+        </div>
+        <Card className="overflow-hidden border-none bg-slate-50/50 shadow-sm ring-1 ring-slate-100 dark:bg-muted/10 dark:ring-muted/30 sm:rounded-3xl">
+          <CardContent className="p-6 sm:p-8">
+            <div className="flex flex-col items-center justify-center py-12">
+              <div className="flex h-16 w-16 items-center justify-center rounded-full bg-slate-100 dark:bg-muted/30">
+                <Star className="h-8 w-8 text-muted-foreground" />
+              </div>
+              <p className="mt-4 text-center text-muted-foreground">
+                Tidak ada layanan aktif saat ini
+              </p>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+  const order = data;
   return (
     <div className="mb-12">
       <div className="mb-4 flex items-center gap-2 text-primary">
@@ -23,19 +82,20 @@ export default function ActiveService() {
             <div className="flex flex-col lg:col-span-3">
               <div className="mb-4 flex flex-wrap items-center gap-3">
                 <span className="inline-flex items-center gap-1.5 rounded-full bg-primary px-3 py-1 text-xs font-bold text-primary-foreground">
-                  <Truck className="h-3.5 w-3.5" /> MENUJU LOKASI
+                  <Truck className="h-3.5 w-3.5" />{" "}
+                  {order.status?.toUpperCase() || "DIPROSES"}
                 </span>
                 <span className="text-sm font-medium text-muted-foreground">
-                  Order ID: #TS-92834
+                  Order ID: #{order.id}
                 </span>
               </div>
 
               <h3 className="mb-3 text-2xl font-bold text-foreground sm:text-3xl">
-                Reparasi AC Inverter - Split System
+                {order.service_name || "Layanan Teknisi"}
               </h3>
               <p className="mb-8 max-w-md leading-relaxed text-muted-foreground">
-                Teknisi sedang dalam perjalanan menuju lokasi Anda. Estimasi
-                waktu kedatangan 12 menit.
+                {order.problem_note ||
+                  "Teknisi sedang dalam perjalanan menuju lokasi Anda."}
               </p>
 
               <div className="mb-8 grid grid-cols-1 gap-6 sm:grid-cols-2">
@@ -48,7 +108,7 @@ export default function ActiveService() {
                       Teknisi Ahli
                     </span>
                     <span className="font-bold text-foreground">
-                      Budi Darmawan
+                      {order.technician_name || "Dalam Penugasan"}
                     </span>
                   </div>
                 </div>
@@ -58,10 +118,10 @@ export default function ActiveService() {
                   </div>
                   <div className="flex flex-col">
                     <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
-                      Jadwal Kedatangan
+                      Total Harga
                     </span>
                     <span className="font-bold text-foreground">
-                      Hari ini, 14:30 WIB
+                      {formatRupiah(order?.total_price + 25000)}
                     </span>
                   </div>
                 </div>
@@ -69,7 +129,9 @@ export default function ActiveService() {
 
               <div>
                 <Button
-                  onClick={() => route.push("/customer/order/detail")}
+                  onClick={() =>
+                    route.push(`/customer/order/detail?id=${order.id}`)
+                  }
                   className="rounded-full h-14 bg-primary px-6 font-semibold shadow-md hover:bg-primary/90"
                 >
                   Lihat Detail & Lacak <ArrowRight className="ml-2 h-4 w-4" />
@@ -77,28 +139,12 @@ export default function ActiveService() {
               </div>
             </div>
 
-            {/* Map/Gambar Kanan (Ambil 2 kolom) */}
             <div className="relative h-64 w-full overflow-hidden rounded-2xl bg-slate-200 lg:col-span-2 lg:h-full">
               <img
                 src="/images/TeknisiDatang-Teknisini.png"
                 alt="Tracking Map"
                 className="h-full w-full object-cover"
               />
-
-              {/* Floating Jarak Badge */}
-              {/* <div className="absolute bottom-4 left-4 right-4 flex items-center gap-3 rounded-xl bg-background/95 p-3 shadow-lg backdrop-blur-sm sm:left-auto sm:right-6 sm:w-auto">
-                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 text-primary">
-                  <MapPin className="h-4 w-4" />
-                </div>
-                <div className="flex flex-col pr-4">
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
-                    Jarak
-                  </span>
-                  <span className="text-sm font-bold text-foreground">
-                    1.2 km lagi
-                  </span>
-                </div>
-              </div> */}
             </div>
           </div>
         </CardContent>

@@ -1,11 +1,41 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { formatRupiah } from "@/lib/utils";
 import { Lock, Send } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useUploadPaymentProof } from "../hooks/use-upload-payment-proof";
 
-export default function PaymentSummary() {
+interface PaymentSummaryProps {
+  detailOrderData?: any;
+  orderId: string;
+  fileReceipt: File | null;
+  onUploadSuccess: () => void;
+}
+
+export default function PaymentSummary({
+  detailOrderData,
+  orderId,
+  fileReceipt,
+  onUploadSuccess,
+}: PaymentSummaryProps) {
   const route = useRouter();
+
+  const uploadPaymentMutation = useUploadPaymentProof({
+    orderId,
+    onSuccess: () => {
+      onUploadSuccess();
+      // Optional: redirect ke halaman status
+      // route.push("/customer/order/status");
+    },
+  });
+
+  const handleUploadPaymentProof = async () => {
+    if (!fileReceipt) {
+      return;
+    }
+    await uploadPaymentMutation.mutate(fileReceipt);
+  };
   return (
     <div className="flex w-full flex-col lg:sticky lg:top-24 lg:w-2/5">
       <Card className="overflow-hidden pt-0 border-none shadow-md sm:rounded-3xl">
@@ -30,9 +60,11 @@ export default function PaymentSummary() {
           <div className="mb-6 flex flex-col gap-4 text-sm">
             <div className="flex justify-between">
               <span className="font-medium text-muted-foreground">
-                Paket Perawatan Server
+                {detailOrderData?.service_name}
               </span>
-              <span className="font-bold text-foreground">Rp1.250.000</span>
+              <span className="font-bold text-foreground">
+                {formatRupiah(detailOrderData?.total_price || 0)}
+              </span>
             </div>
             <div className="flex justify-between">
               <span className="font-medium text-muted-foreground">
@@ -40,13 +72,6 @@ export default function PaymentSummary() {
               </span>
               <span className="font-bold text-foreground">Rp25.000</span>
             </div>
-            {/* <div className="flex justify-between"> */}
-              {/* <span className="font-medium text-muted-foreground">
-                Kode Unik
-              </span> */}
-              {/* Menggunakan warna accent (orange) untuk unique code */}
-              {/* <span className="font-bold text-accent">Rp 124</span> */}
-            {/* </div> */}
           </div>
 
           <hr className="my-2 border-muted" />
@@ -58,7 +83,7 @@ export default function PaymentSummary() {
             </span>
             <div className="flex items-end justify-between">
               <span className="text-3xl font-extrabold text-foreground sm:text-4xl">
-                Rp1.275.000
+                {formatRupiah(detailOrderData?.total_price + 25000 || 0)}
               </span>
               <span className="mb-1 text-[10px] font-medium text-muted-foreground">
                 Tax Included
@@ -69,10 +94,14 @@ export default function PaymentSummary() {
           {/* Tombol Aksi */}
           <div className="flex flex-col gap-3">
             <Button
-              onClick={() => route.push("/customer/order/status")}
-              className="w-full h-14 rounded-full bg-primary text-base font-semibold text-primary-foreground shadow-md hover:bg-primary/90"
+              onClick={handleUploadPaymentProof}
+              disabled={!fileReceipt || uploadPaymentMutation.isPending}
+              className="w-full h-14 rounded-full bg-primary text-base font-semibold text-primary-foreground shadow-md hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Kirim Bukti Pembayaran <Send className="ml-2 h-4 w-4" />
+              {uploadPaymentMutation.isPending
+                ? "Sedang Mengunggah..."
+                : "Kirim Bukti Pembayaran"}{" "}
+              <Send className="ml-2 h-4 w-4" />
             </Button>
 
             <Button

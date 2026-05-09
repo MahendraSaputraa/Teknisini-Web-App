@@ -445,6 +445,108 @@ Error umum:
 
 ---
 
+## Data Shapes (Reference)
+
+### Order object
+
+```json
+{
+  "id": "order_id",
+  "user_id": "user-1",
+  "user_name": "Wahyu",
+  "user_phone": "0812...",
+  "user_email": "wahyu@mail.com",
+  "service_id": "svc-1",
+  "service_name": "Service AC",
+  "price_service": 100000,
+  "platform_fee": 25000,
+  "total_price": 125000,
+  "problem_note": "AC tidak dingin",
+  "location": { "lat": -6.2, "lng": 106.8 },
+  "address_text": "Jl. Contoh No. 1",
+  "status": "pending",
+  "payment_status": "pending",
+  "technician_id": null,
+  "technician_name": null,
+  "payment_proof": null,
+  "created_at": "2026-04-09T10:00:00.000Z",
+  "completed_at": null
+}
+```
+
+### Technician object
+
+```json
+{
+  "id": "tech_id",
+  "name": "Budi",
+  "phone": "0812...",
+  "category": "AC",
+  "status": "available",
+  "rating_avg": 4.8,
+  "total_reviews": 21
+}
+```
+
+### User profile (from `/auth/me`)
+
+```json
+{
+  "uid": "uid_firebase",
+  "name": "Wahyu",
+  "email": "wahyu@mail.com",
+  "role": "user"
+}
+```
+
+---
+
+## API Flow (End-to-End)
+
+### 1) Auth & session (semua role)
+
+1. `POST /auth/register` untuk akun baru.
+2. Login via Firebase Auth client (email/password atau Google).
+3. Ambil token: `await user.getIdToken()`.
+4. Simpan token ke cookie `token` agar halaman `/admin` bisa lolos middleware.
+5. Panggil `GET /auth/me` dengan header Bearer untuk ambil `role`.
+
+### 2) Customer flow (buat order)
+
+1. (Opsional) `GET /technicians?status=available` untuk lihat teknisi.
+2. `POST /orders` dengan `user_id`, `service_id`, `price_service`, `location`.
+3. Simpan `order_id` dari response.
+4. Tampilkan progress order via:
+   - `GET /orders/{id}` (detail), atau
+   - `GET /orders` lalu filter client-side dengan `user_id`.
+5. Upload bukti bayar: `PATCH /orders/{id}` action `upload_payment_proof`.
+6. Tunggu admin verifikasi (pantau `payment_status`).
+7. Setelah teknisi ditugaskan, status berubah ke `diproses` lalu `menuju_lokasi`.
+
+### 3) Admin flow (verifikasi & penugasan)
+
+1. `GET /orders` lalu filter `payment_status = waiting_verification`.
+2. Verifikasi pembayaran: `PATCH /orders/{id}` action `verify_payment`.
+   - `approve: true` -> `status = diproses`, `payment_status = paid`.
+   - `approve: false` -> `payment_status = rejected`.
+3. `GET /technicians?status=available` untuk pilih teknisi.
+4. Assign teknisi: `PATCH /orders/{id}` action `assign_technician`.
+5. Pantau order via `GET /orders` (filter client-side).
+
+### 4) Technician flow (eksekusi pekerjaan)
+
+1. `GET /orders` lalu filter `technician_id` dan `status`.
+2. Update status ke lokasi: `PATCH /orders/{id}` action `update_status` -> `menuju_lokasi`.
+3. Selesai pekerjaan: `PATCH /orders/{id}` action `update_status` -> `completed`.
+   - Otomatis set `completed_at` dan status teknisi kembali `available`.
+
+Catatan penting:
+
+- Endpoint list (`/orders`, `/technicians`) mengembalikan semua data; filter dilakukan di frontend.
+- Jika butuh filter server-side (mis. `?user_id=...`), perlu penambahan query di API.
+
+---
+
 ## Frontend Integration Checklist
 
 1. Login user via Firebase Auth client.

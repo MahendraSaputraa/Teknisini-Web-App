@@ -12,8 +12,8 @@ export interface Category {
 
 // ─── Baca ─────────────────────────────────────────────────────────────────────
 
-export const getCategories = async () => {
-  const res = await api.get("/categories");
+export const getCategories = async (params?: any) => {
+  const res = await api.get("/categories", { params });
   return res.data;
 };
 

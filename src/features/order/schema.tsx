@@ -9,7 +9,9 @@ export const payloadSchema = z.object({
     "completed",
     "cancelled",
   ]),
-  payment_status: z.enum(["pending", "verified", "rejected"]).optional(),
+  payment_status: z
+    .enum(["pending", "waiting_verification", "paid", "rejected"])
+    .optional(),
   user_name: z.string().min(3, "Nama pengguna minimal 3 karakter"),
   user_phone: z.string().min(10, "Nomor telepon minimal 10 digit"),
   user_email: z.string().email("Email tidak valid"),
@@ -17,6 +19,7 @@ export const payloadSchema = z.object({
   price_service: z.number().positive("Harga harus lebih dari 0"),
   problem_note: z.string().optional(),
   address_text: z.string().optional(),
+  payment_proof: z.string().optional(),
   technician_id: z.string().optional(),
   technician_name: z.string().optional(),
 });
@@ -34,6 +37,7 @@ export const defaultValues: PayloadData = {
   price_service: 0,
   problem_note: "",
   address_text: "",
+  payment_proof: "",
   technician_id: "",
   technician_name: "",
 };

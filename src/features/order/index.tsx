@@ -21,6 +21,13 @@ export default function OrderTableData() {
     },
   });
 
+  const { verify } = useVerifyPayment({
+    onSuccessCallback: () => {
+      // Data will be refreshed by query invalidation in hook
+      // Modal is closed in handleVerifyPayment
+    },
+  });
+
   // payload data
   const [errors, setErrors] = useState({});
   const [payloadData, setPayloadData] = useState<PayloadData>(defaultValues);
@@ -47,6 +54,7 @@ export default function OrderTableData() {
       price_service: data.price_service,
       problem_note: data.problem_note,
       address_text: data.address_text,
+      payment_proof: data.payment_proof,
       technician_id: data.technician_id,
       technician_name: data.technician_name,
     });
@@ -65,6 +73,7 @@ export default function OrderTableData() {
       price_service: data.price_service,
       problem_note: data.problem_note,
       address_text: data.address_text,
+      payment_proof: data.payment_proof,
       technician_id: data.technician_id,
       technician_name: data.technician_name,
     });
@@ -83,6 +92,19 @@ export default function OrderTableData() {
     onEdit: handleOpenEditModal,
     onDelete: handleOpenDeleteModal,
   });
+
+  // handle verify payment
+  const handleVerifyPayment = async (orderId: string, approve: boolean) => {
+    try {
+      await verify.mutateAsync({ id: orderId, approve });
+      // Close modal after successful verification
+      closeModal();
+      setPayloadData(defaultValues);
+      setErrors({});
+    } catch (error) {
+      console.error("Error verifying payment:", error);
+    }
+  };
 
   // handle submit
   const handleSubmit = async () => {
@@ -134,7 +156,9 @@ export default function OrderTableData() {
         mode={modalMode}
         onClose={closeModal}
         onSubmit={handleSubmit}
+        onVerifyPayment={handleVerifyPayment}
         isPending={update.isPending}
+        isVerifying={verify.isPending}
         payloadData={payloadData}
         setPayloadData={setPayloadData}
         errors={errors as any}

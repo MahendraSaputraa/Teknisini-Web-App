@@ -14,8 +14,10 @@ import { FieldGroup } from "@/components/ui/field";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Spinner } from "@/components/ui/spinner";
 import { FormInput } from "@/components/form-components/form-input";
+import { FormComboBox } from "@/components/form-components/form-combobox";
 import { PayloadData } from "../schema";
 import { FormSelect } from "@/components/form-components/form-select";
+import { useCategories } from "../hooks/use-categories";
 
 export interface CreateEditModalProps {
   isOpen: boolean;
@@ -38,6 +40,15 @@ export function CreateEditModal({
   payloadData,
   errors,
 }: CreateEditModalProps) {
+  const { data: categoriesData, isLoading: isCategoriesLoading } =
+    useCategories();
+
+  const categoryOptions =
+    categoriesData?.data?.map((cat: any) => ({
+      label: cat.name,
+      value: cat.name,
+    })) || [];
+
   const statusOptions = [
     { label: "Tersedia", value: "available" },
     { label: "Sibuk", value: "busy" },
@@ -88,19 +99,21 @@ export function CreateEditModal({
               }
               error={errors?.phone?.[0]}
             />
-            <FormInput
+            <FormComboBox
               label="Kategori Teknisi"
               name="category"
-              type="text"
-              placeholder="Tukang Pukul"
+              placeholder="Pilih kategori teknisi..."
               required
               value={payloadData.category}
-              onChange={(e: any) =>
-                setPayloadData((prev) => ({
+              onChange={(option) =>
+                setPayloadData((prev: any) => ({
                   ...prev,
-                  category: e.target.value,
+
+                  category: option?.value || "",
                 }))
               }
+              options={categoryOptions}
+              isLoading={isCategoriesLoading}
               error={errors?.category?.[0]}
             />
 

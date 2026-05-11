@@ -34,6 +34,8 @@ export interface CreateEditModalProps {
   payloadData: PayloadData;
   setPayloadData: Dispatch<SetStateAction<PayloadData>>;
   errors?: Record<string, string[] | undefined>;
+  onAssignTechnician?: (orderId: string, technicianId: string) => void;
+  isAssigning?: boolean;
 }
 
 const statusOptions = [
@@ -55,6 +57,8 @@ export function CreateEditModal({
   setPayloadData,
   payloadData,
   errors,
+  onAssignTechnician,
+  isAssigning,
 }: CreateEditModalProps) {
   const { data: technicianData, isPending: isTechnicianLoading } =
     useTechnicianList();
@@ -327,7 +331,7 @@ export function CreateEditModal({
               </div>
             )}
 
-            {/* STAGE 2: Technician Assignment (only after payment approved) */}
+            {/* // Ubah STAGE 2 menjadi seperti ini: */}
             {mode === "edit" && isPaymentApproved && (
               <div>
                 <h3 className="text-sm font-semibold mb-3 flex items-center gap-2">
@@ -341,7 +345,9 @@ export function CreateEditModal({
                     options={technicianOptions}
                     value={payloadData.technician_id}
                     onChange={handleTechnicianSelect}
-                    disabled={isTechnicianLoading}
+                    disabled={
+                      isTechnicianLoading || !!payloadData.technician_id
+                    } // lock setelah assigned
                     error={errors?.technician_id?.[0]}
                   />
 
@@ -355,6 +361,23 @@ export function CreateEditModal({
                       value={payloadData.technician_name}
                       error={errors?.technician_name?.[0]}
                     />
+                  )}
+
+                  {/* Tombol assign — hanya muncul kalau teknisi dipilih tapi belum di-assign ke DB */}
+                  {payloadData.technician_id && (
+                    <Button
+                      className="w-full"
+                      onClick={() =>
+                        onAssignTechnician?.(
+                          payloadData.id || "",
+                          payloadData.technician_id || "",
+                        )
+                      }
+                      disabled={isAssigning}
+                    >
+                      {isAssigning && <Spinner className="mr-2 h-4 w-4" />}
+                      Assign Teknisi
+                    </Button>
                   )}
                 </div>
               </div>

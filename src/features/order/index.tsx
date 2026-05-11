@@ -10,7 +10,7 @@ import { useUpdateOrder } from "./hooks/use-update";
 import { useVerifyPayment } from "./hooks/use-verify-payment";
 import { DeleteModal } from "@/components/modal/delete-modal";
 import { toast } from "sonner";
-
+import { useAssignTechnician } from "./hooks/use-assign-technician";
 export default function OrderTableData() {
   // hooks
   const { update } = useUpdateOrder({
@@ -25,6 +25,14 @@ export default function OrderTableData() {
     onSuccessCallback: () => {
       // Data will be refreshed by query invalidation in hook
       // Modal is closed in handleVerifyPayment
+    },
+  });
+
+  const { assign } = useAssignTechnician({
+    onSuccessCallback: () => {
+      closeModal();
+      setPayloadData(defaultValues);
+      setErrors({});
     },
   });
 
@@ -106,26 +114,33 @@ export default function OrderTableData() {
     }
   };
 
+  const handleAssignTechnician = async (
+    orderId: string,
+    technicianId: string,
+  ) => {
+    try {
+      await assign.mutateAsync({ id: orderId, technicianId });
+    } catch (error) {
+      console.error("Error assigning technician:", error);
+    }
+  };
+
   // handle submit
   const handleSubmit = async () => {
     try {
       const validation = payloadSchema.safeParse(payloadData);
-
       if (!validation.success) {
-        const formattedErrors = validation.error.flatten().fieldErrors;
-        setErrors(formattedErrors);
+        setErrors(validation.error.flatten().fieldErrors);
         return;
       }
-
       setErrors({});
 
       if (modalMode === "edit") {
         await update.mutateAsync({
           id: payloadData.id,
           payload: {
+            action: "update_status", // pastikan action dikirim
             status: payloadData.status,
-            payment_status: payloadData.payment_status,
-            technician_id: payloadData.technician_id,
           },
         });
       }
@@ -133,7 +148,6 @@ export default function OrderTableData() {
       console.error("Error:", error);
     }
   };
-
   return (
     <div className="space-y-4">
       <TableToolbar
@@ -157,6 +171,8 @@ export default function OrderTableData() {
         onClose={closeModal}
         onSubmit={handleSubmit}
         onVerifyPayment={handleVerifyPayment}
+        onAssignTechnician={handleAssignTechnician}
+        isAssigning={assign.isPending}
         isPending={update.isPending}
         isVerifying={verify.isPending}
         payloadData={payloadData}

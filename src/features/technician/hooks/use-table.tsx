@@ -24,8 +24,9 @@ import {
   ClockIcon, // Tambahan icon
   StarIcon, // Tambahan icon untuk rating
 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useTechnician } from "./use-list";
+import { useCategories } from "./use-categories";
 
 import { Badge } from "@/components/ui/badge";
 
@@ -44,6 +45,19 @@ export function useTableData({ onEdit, onDelete }: any) {
     ...(debouncedSearchParams && { search: debouncedSearchParams }),
     limit: 10,
   });
+
+  const { data: categoriesData } = useCategories();
+
+  // Create a map of category_id to category name for quick lookup
+  const categoryMap = useMemo(() => {
+    const map: Record<string, string> = {};
+    if (categoriesData?.data) {
+      categoriesData.data.forEach((cat: any) => {
+        map[cat.id] = cat.name;
+      });
+    }
+    return map;
+  }, [categoriesData]);
 
   useEffect(() => {
     const timer = setTimeout(
@@ -116,9 +130,11 @@ export function useTableData({ onEdit, onDelete }: any) {
           );
         },
         cell: ({ row }) => {
-          return (
-            <div className="ps-3 font-medium"> {row.original.category} </div>
-          );
+          // Use category_id if available, otherwise fall back to category
+          const categoryId = row.original.category;
+          const categoryName =
+            categoryMap[categoryId] || row.original.category || "-";
+          return <div className="ps-3 font-medium"> {categoryName} </div>;
         },
       },
       {

@@ -66,12 +66,16 @@ export function CreateEditModal({
   const technicianOptions = useMemo(() => {
     if (!technicianData?.data) return [];
     return technicianData.data
-      .filter((tech: any) => tech.status === "available")
+      .filter(
+        (tech: any) =>
+          tech.status === "available" &&
+          tech.category === payloadData.service_id,
+      )
       .map((tech: any) => ({
         label: tech.name,
         value: tech.id,
       }));
-  }, [technicianData]);
+  }, [technicianData, payloadData]);
 
   const handleTechnicianSelect = (option: any) => {
     if (!option) {

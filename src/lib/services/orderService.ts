@@ -28,6 +28,8 @@ export interface Order {
   user_email: string;
   service_id: string;
   service_name: string;
+  category_id: string;
+  category_name: string;
   price_service: number;
   platform_fee: number;
   total_price: number;
@@ -50,6 +52,8 @@ export interface CreateOrderInput {
   user_email?: string;
   service_id?: string;
   service_name?: string;
+  category_id?: string;
+  category_name?: string;
   price_service?: number;
   problem_note?: string;
   location?: OrderLocation;
@@ -90,6 +94,8 @@ function mapOrderDoc(doc: FirebaseFirestore.DocumentSnapshot): Order {
     user_email: data.user_email,
     service_id: data.service_id,
     service_name: data.service_name,
+    category_id: data.category_id,
+    category_name: data.category_name,
     price_service: data.price_service,
     platform_fee: data.platform_fee,
     total_price: data.total_price,
@@ -152,6 +158,8 @@ export async function createOrder(input: CreateOrderInput) {
     user_email: input.user_email ?? "",
     service_id: input.service_id,
     service_name: input.service_name ?? "",
+    category_id: input.category_id ?? "",
+    category_name: input.category_name ?? "",
     price_service: priceService,
     platform_fee: platformFee,
     total_price: totalPrice,

@@ -46,7 +46,7 @@ export function CreateEditModal({
   const categoryOptions =
     categoriesData?.data?.map((cat: any) => ({
       label: cat.name,
-      value: cat.name,
+      value: cat.id,
     })) || [];
 
   const statusOptions = [

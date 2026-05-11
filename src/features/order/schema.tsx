@@ -18,6 +18,7 @@ export const payloadSchema = z.object({
   service_name: z.string().min(3, "Nama layanan minimal 3 karakter"),
   price_service: z.number().positive("Harga harus lebih dari 0"),
   problem_note: z.string().optional(),
+  service_id: z.string().optional(),
   address_text: z.string().optional(),
   payment_proof: z.string().optional(),
   technician_id: z.string().optional(),

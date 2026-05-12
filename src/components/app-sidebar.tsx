@@ -187,7 +187,7 @@ export function AppSidebar({ currentUser, ...props }: AppSidebarProps) {
             >
               <a href="#">
                 <CommandIcon className="size-5!" />
-                <span className="text-base font-semibold">Teknisisa</span>
+                <span className="text-base font-semibold">Teknisini</span>
               </a>
             </SidebarMenuButton>
           </SidebarMenuItem>

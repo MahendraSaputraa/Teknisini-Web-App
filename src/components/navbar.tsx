@@ -52,7 +52,11 @@ export default function Navbar({ user }: any) {
             href="/"
             className="text-xl font-bold tracking-tight text-primary"
           >
-            <img className="w-full h-5 object-cover" src="/images/logo-TekniSini.png" alt="" />
+            <img
+              className="w-full h-5"
+              src="/images/logo-TekniSini.png"
+              alt=""
+            />
           </Link>
         </div>
 
@@ -136,11 +140,13 @@ export default function Navbar({ user }: any) {
             >
               <SheetHeader className=" px-0 text-left border-b">
                 <SheetTitle className="text-primary font-bold">
-                  <Link
-                    href="/"
-                  >
-                    <img className="h-6" src="/images/logo-TekniSini.png" alt="" />
-                   </Link>
+                  <Link href="/">
+                    <img
+                      className="h-6"
+                      src="/images/logo-TekniSini.png"
+                      alt=""
+                    />
+                  </Link>
                 </SheetTitle>
               </SheetHeader>
 

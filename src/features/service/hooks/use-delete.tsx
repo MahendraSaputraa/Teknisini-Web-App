@@ -9,6 +9,7 @@ export function useDeleteService({ onSuccessCallback }: any = {}) {
     mutationFn: (id: any) => deleteService(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["admin-service"] });
+      queryClient.invalidateQueries({ queryKey: ["admin-dashboard-stats"] });
       toast.success("Layanan berhasil dihapus");
       onSuccessCallback?.();
     },

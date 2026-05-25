@@ -22,6 +22,7 @@ export function useVerifyPayment({
       verifyPayment(id, approve), // <-- pastikan ini yang terpanggil, bukan endpoint lain
     onSuccess: (res) => {
       queryClient.invalidateQueries({ queryKey: ["orders"] });
+      queryClient.invalidateQueries({ queryKey: ["admin-dashboard-stats"] });
       toast.success("Pembayaran berhasil diverifikasi");
       onSuccessCallback?.(res);
     },

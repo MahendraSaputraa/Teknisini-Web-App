@@ -11,6 +11,7 @@ export const useCreateOrder = () => {
     mutationFn: (payload: any) => createOrder(payload),
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["orders"] });
+      queryClient.invalidateQueries({ queryKey: ["admin-dashboard-stats"] });
       toast.success("Pesanan Berhasil", {
         description: "Menuju halaman pembayaran...",
       });

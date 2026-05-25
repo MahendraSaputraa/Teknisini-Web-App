@@ -9,6 +9,7 @@ export function useDeleteTechnician({ onSuccessCallback }: any = {}) {
     mutationFn: (id: string) => deleteTechnician(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["admin-technician"] });
+      queryClient.invalidateQueries({ queryKey: ["admin-dashboard-stats"] });
       toast.success("Teknisi berhasil dihapus");
       onSuccessCallback?.();
     },

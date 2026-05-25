@@ -9,6 +9,7 @@ export function useUpdateTechnician({ onSuccessCallback }: any = {}) {
     mutationFn: ({ id, payload }: any) => updateTechnician(id, payload),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["admin-technician"] });
+      queryClient.invalidateQueries({ queryKey: ["admin-dashboard-stats"] });
       toast.success("Teknisi berhasil diperbarui");
       onSuccessCallback?.();
     },

@@ -9,6 +9,7 @@ export function useUpdateService({ onSuccessCallback }: any = {}) {
     mutationFn: ({ id, payload }: any) => updateService(id, payload),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["admin-service"] });
+      queryClient.invalidateQueries({ queryKey: ["admin-dashboard-stats"] });
       toast.success("Layanan berhasil diperbarui");
       onSuccessCallback?.();
     },

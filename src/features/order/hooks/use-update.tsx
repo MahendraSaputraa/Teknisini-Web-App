@@ -17,6 +17,7 @@ export function useUpdateOrder({ onSuccessCallback }: any = {}) {
     },
     onSuccess: (res) => {
       queryClient.invalidateQueries({ queryKey: ["orders"] });
+      queryClient.invalidateQueries({ queryKey: ["admin-dashboard-stats"] });
       toast.success("Order berhasil diperbarui");
       onSuccessCallback?.();
     },

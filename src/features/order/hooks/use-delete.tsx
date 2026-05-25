@@ -9,6 +9,7 @@ export function useDeleteOrder({ onSuccessCallback }: any = {}) {
     mutationFn: (id: string) => deleteOrder(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["orders"] });
+      queryClient.invalidateQueries({ queryKey: ["admin-dashboard-stats"] });
       toast.success("Order berhasil dihapus");
       onSuccessCallback?.();
     },

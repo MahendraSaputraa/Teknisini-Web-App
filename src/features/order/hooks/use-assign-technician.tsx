@@ -10,6 +10,7 @@ export function useAssignTechnician({ onSuccessCallback }: any = {}) {
       assignTechnician(id, technicianId),
     onSuccess: (res) => {
       queryClient.invalidateQueries({ queryKey: ["orders"] });
+      queryClient.invalidateQueries({ queryKey: ["admin-dashboard-stats"] });
       toast.success("Teknisi berhasil di-assign");
       onSuccessCallback?.(res?.data);
     },

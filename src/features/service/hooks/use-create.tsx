@@ -9,7 +9,8 @@ export function useCreateService({ onSuccessCallback }: any = {}) {
     mutationFn: createService,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["admin-service"] });
-      toast.success("Layanan berhasil dibuat");
+      queryClient.invalidateQueries({ queryKey: ["admin-dashboard-stats"] });
+      toast.success("Layanan berhasil ditambahkan");
 
       onSuccessCallback?.();
     },

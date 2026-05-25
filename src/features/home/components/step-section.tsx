@@ -75,8 +75,8 @@ export default function StepSection() {
               <div className="absolute left-0 top-0 h-full w-2 bg-primary"></div>
 
               <p className="mb-4 text-sm font-medium italic leading-relaxed text-muted-foreground md:text-base">
-                "Layanan yang sangat profesional! Teknisi datang hanya dalam 35
-                menit dan memperbaiki AC saya dengan sangat rapi."
+                &quot;Layanan yang sangat profesional! Teknisi datang hanya dalam 35
+                menit dan memperbaiki AC saya dengan sangat rapi.&quot;
               </p>
               <p className="text-sm font-bold text-foreground">
                 — Budi Pratama, Denpasar Utara

@@ -90,9 +90,9 @@ export default function TechnicianTableData() {
       create.mutate(payload);
     }
     if (modalMode === "edit") {
-      const { id, ...rest } = payloadData;
+      const { id: _, ...rest } = payloadData;
 
-      update.mutate({ id, payload: rest });
+      update.mutate({ id: payloadData.id, payload: rest });
     }
   };
   const handleDeleteModal = () => {

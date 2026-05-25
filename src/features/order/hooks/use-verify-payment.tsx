@@ -9,7 +9,7 @@ interface VerifyPaymentParams {
 }
 
 interface UseVerifyPaymentOptions {
-  onSuccessCallback?: () => void;
+  onSuccessCallback?: (res?: any) => void;
 }
 
 export function useVerifyPayment({
@@ -20,10 +20,10 @@ export function useVerifyPayment({
   const verify = useMutation({
     mutationFn: ({ id, approve }: VerifyPaymentParams) =>
       verifyPayment(id, approve), // <-- pastikan ini yang terpanggil, bukan endpoint lain
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["admin-order"] });
+    onSuccess: (res) => {
+      queryClient.invalidateQueries({ queryKey: ["orders"] });
       toast.success("Pembayaran berhasil diverifikasi");
-      onSuccessCallback?.();
+      onSuccessCallback?.(res);
     },
     onError: (error: any) => {
       toast.error(

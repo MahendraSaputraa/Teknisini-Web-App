@@ -1,10 +1,9 @@
 "use client";
 
 import * as React from "react";
+import Link from "next/link";
 
-import { NavDocuments } from "@/components/nav-documents";
 import { NavMain } from "@/components/nav-main";
-import { NavSecondary } from "@/components/nav-secondary";
 import { NavUser } from "@/components/nav-user";
 import {
   Sidebar,
@@ -17,9 +16,6 @@ import {
 } from "@/components/ui/sidebar";
 import {
   LayoutDashboardIcon,
-  UsersIcon,
-  CommandIcon,
-  CreditCard,
   Wrench,
   Receipt,
   Workflow,
@@ -185,10 +181,14 @@ export function AppSidebar({ currentUser, ...props }: AppSidebarProps) {
               asChild
               className="data-[slot=sidebar-menu-button]:p-1.5!"
             >
-              <a href="#">
-                <CommandIcon className="size-5!" />
+              <Link href="/admin/dashboard">
+                <img
+                  className="size-5!"
+                  src="/images/logo-TekniSini.png"
+                  alt="Teknisini Logo"
+                />
                 <span className="text-base font-semibold">Teknisini</span>
-              </a>
+              </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>

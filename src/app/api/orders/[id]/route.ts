@@ -7,6 +7,7 @@ import {
   uploadPaymentProof,
   verifyPayment,
   deleteOrder,
+  submitReview,
 } from "@/lib/services/orderService"
 import { AppError } from "@/lib/services/errors"
 
@@ -15,6 +16,7 @@ type OrderAction =
   | "verify_payment"
   | "assign_technician"
   | "update_status"
+  | "submit_review"
 
 function handleApiError(error: unknown) {
   if (error instanceof AppError) {
@@ -76,6 +78,12 @@ export async function PATCH(
     if (action === "update_status") {
       const nextStatus = body.status as OrderStatus
       const updated = await updateOrderStatus(id, nextStatus)
+      return NextResponse.json({ data: updated }, { status: 200 })
+    }
+
+    if (action === "submit_review") {
+      const { rating, comment } = body
+      const updated = await submitReview(id, rating, comment)
       return NextResponse.json({ data: updated }, { status: 200 })
     }
 

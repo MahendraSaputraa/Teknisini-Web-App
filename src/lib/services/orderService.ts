@@ -41,6 +41,8 @@ export interface Order {
   technician_id: string | null;
   technician_name: string | null;
   payment_proof: string | null;
+  review_rating: number | null;
+  review_comment: string | null;
   created_at: string | null;
   completed_at: string | null;
 }
@@ -107,9 +109,77 @@ function mapOrderDoc(doc: FirebaseFirestore.DocumentSnapshot): Order {
     technician_id: data.technician_id ?? null,
     technician_name: data.technician_name ?? null,
     payment_proof: data.payment_proof ?? null,
+    review_rating: data.review_rating ?? null,
+    review_comment: data.review_comment ?? null,
     created_at: toIso(data.created_at),
     completed_at: toIso(data.completed_at),
   };
+}
+
+/**
+ * Submit review for a completed order
+ */
+export async function submitReview(
+  orderId: string,
+  rating: number,
+  comment?: string
+) {
+  if (rating < 1 || rating > 5) {
+    throw new AppError("Rating must be between 1 and 5", 400);
+  }
+
+  const orderRef = db.collection(ORDER_COLLECTION).doc(orderId);
+
+  await db.runTransaction(async (tx) => {
+    const orderSnap = await tx.get(orderRef);
+
+    if (!orderSnap.exists) {
+      throw new AppError("Order not found", 404);
+    }
+
+    const orderData = orderSnap.data() as Record<string, unknown>;
+
+    if (orderData.status !== "completed") {
+      throw new AppError("Only completed orders can be reviewed", 400);
+    }
+
+    if (orderData.review_rating) {
+      throw new AppError("Order has already been reviewed", 400);
+    }
+
+    // Update order with review
+    tx.update(orderRef, {
+      review_rating: rating,
+      review_comment: comment ?? null,
+    });
+
+    // Update technician rating if exists
+    if (orderData.technician_id) {
+      const technicianRef = db
+        .collection(TECHNICIAN_COLLECTION)
+        .doc(orderData.technician_id as string);
+      const techSnap = await tx.get(technicianRef);
+
+      if (techSnap.exists) {
+        const techData = techSnap.data()!;
+        const currentAvg = techData.rating_avg || 0;
+        const currentTotal = techData.total_reviews || 0;
+
+        const newTotal = currentTotal + 1;
+        const newAvg = Number(
+          ((currentAvg * currentTotal + rating) / newTotal).toFixed(1)
+        );
+
+        tx.update(technicianRef, {
+          rating_avg: newAvg,
+          total_reviews: newTotal,
+        });
+      }
+    }
+  });
+
+  const updated = await orderRef.get();
+  return mapOrderDoc(updated);
 }
 
 function ensureRequiredCreateFields(input: CreateOrderInput) {

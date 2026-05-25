@@ -16,7 +16,7 @@ export default function CustomerOrderStatusData() {
   >("all");
 
   // Get current user
-  const { data: userData, isLoading: userLoading } = useCurrentUser();
+  const { data: userData } = useCurrentUser();
   const userId = userData?.uid;
 
   // Fetch active order by ID (dari URL)

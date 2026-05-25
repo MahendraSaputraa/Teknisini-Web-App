@@ -26,7 +26,7 @@ const navLinks = [
   { title: "Tentang Kami", href: "#layanan" },
   { title: "Cara Kerja", href: "#step" },
   { title: "Buat Pesanan", href: "/customer/booking" },
-  { title: "Pesanan Saya", href: "/customer/order/status" },
+  { title: "Pesanan Saya", href: "/customer/order" },
 ];
 
 export default function Navbar({ user }: any) {

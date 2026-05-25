@@ -104,3 +104,16 @@ export const deleteOrder = async (orderId: string) => {
 
 export const cancelOrder = async (orderId: string) =>
   updateOrderStatus(orderId, "cancelled");
+
+export const submitReview = async (
+  orderId: string,
+  rating: number,
+  comment?: string,
+) => {
+  const res = await api.patch(`/orders/${orderId}`, {
+    action: "submit_review",
+    rating,
+    comment,
+  });
+  return res.data;
+};

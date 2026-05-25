@@ -24,6 +24,8 @@ export const payloadSchema = z.object({
   payment_proof: z.string().optional().nullable(),
   technician_id: z.string().optional().nullable(),
   technician_name: z.string().optional().nullable(),
+  review_rating: z.number().optional().nullable(),
+  review_comment: z.string().optional().nullable(),
 });
 
 export type PayloadData = z.infer<typeof payloadSchema>;
@@ -44,4 +46,6 @@ export const defaultValues: PayloadData = {
   payment_proof: "",
   technician_id: "",
   technician_name: "",
+  review_rating: null,
+  review_comment: null,
 };

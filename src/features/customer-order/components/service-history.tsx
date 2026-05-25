@@ -8,8 +8,10 @@ import {
   Wifi,
   Wrench,
 } from "lucide-react";
-import React from "react";
+import React, { useState } from "react";
 import { formatRupiah } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { ReviewModal } from "./review-modal";
 
 interface ServiceHistoryProps {
   data?: any[];
@@ -77,6 +79,8 @@ export default function ServiceHistory({
   filter = "all",
   onFilterChange,
 }: ServiceHistoryProps) {
+  const [reviewOrder, setReviewOrder] = useState<any>(null);
+
   if (isLoading) {
     return (
       <div>
@@ -196,24 +200,34 @@ export default function ServiceHistory({
                   >
                     {getStatusLabel(order.status)}
                   </span>
-                  {order.status === "completed" && order.rating && (
-                    <div className="flex gap-0.5">
-                      {[1, 2, 3, 4, 5].map((star) => (
-                        <Star
-                          key={star}
-                          className={`h-3 w-3 ${
-                            star <= order.rating
-                              ? "fill-accent text-accent"
-                              : "text-slate-300"
-                          }`}
-                        />
-                      ))}
-                    </div>
-                  )}
-                  {order.status === "completed" && !order.rating && (
-                    <span className="text-[10px] text-muted-foreground">
-                      Belum dinilai
-                    </span>
+                  
+                  {/* Rating Logic */}
+                  {order.status === "completed" && (
+                    <>
+                      {order.review_rating ? (
+                        <div className="flex gap-0.5">
+                          {[1, 2, 3, 4, 5].map((star) => (
+                            <Star
+                              key={star}
+                              className={`h-3 w-3 ${
+                                star <= order.review_rating
+                                  ? "fill-yellow-400 text-yellow-500"
+                                  : "text-slate-300"
+                              }`}
+                            />
+                          ))}
+                        </div>
+                      ) : (
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="h-7 rounded-full border-primary text-[10px] font-bold text-primary hover:bg-primary hover:text-white"
+                          onClick={() => setReviewOrder(order)}
+                        >
+                          Beri Nilai
+                        </Button>
+                      )}
+                    </>
                   )}
                 </div>
               </CardContent>
@@ -228,6 +242,16 @@ export default function ServiceHistory({
           </div>
         )}
       </div>
+
+      {/* Review Modal */}
+      {reviewOrder && (
+        <ReviewModal
+          isOpen={!!reviewOrder}
+          onClose={() => setReviewOrder(null)}
+          orderId={reviewOrder.id}
+          serviceName={reviewOrder.service_name}
+        />
+      )}
     </div>
   );
 }

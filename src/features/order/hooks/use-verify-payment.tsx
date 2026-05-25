@@ -21,7 +21,7 @@ export function useVerifyPayment({
     mutationFn: ({ id, approve }: VerifyPaymentParams) =>
       verifyPayment(id, approve), // <-- pastikan ini yang terpanggil, bukan endpoint lain
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["orders"] });
+      queryClient.invalidateQueries({ queryKey: ["admin-order"] });
       toast.success("Pembayaran berhasil diverifikasi");
       onSuccessCallback?.();
     },

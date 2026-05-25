@@ -71,7 +71,8 @@ export function useTableData({ onEdit, onDelete }: any) {
   const getPaymentStatusBadge = (status: string) => {
     const statusMap: Record<string, { variant: any; label: string }> = {
       pending: { variant: "outline", label: "Menunggu" },
-      verified: { variant: "default", label: "Terverifikasi" },
+      waiting_verification: { variant: "secondary", label: "Menunggu Verifikasi" },
+      paid: { variant: "default", label: "Terbayar" },
       rejected: { variant: "destructive", label: "Ditolak" },
     };
     const config = statusMap[status] || { variant: "outline", label: status };

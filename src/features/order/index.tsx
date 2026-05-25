@@ -11,8 +11,17 @@ import { useVerifyPayment } from "./hooks/use-verify-payment";
 import { DeleteModal } from "@/components/modal/delete-modal";
 import { toast } from "sonner";
 import { useAssignTechnician } from "./hooks/use-assign-technician";
+import { useDeleteOrder } from "./hooks/use-delete";
+
 export default function OrderTableData() {
   // hooks
+  const { deleted } = useDeleteOrder({
+    onSuccessCallback: () => {
+      closeDeleteModal();
+      setPayloadData(defaultValues);
+    },
+  });
+
   const { update } = useUpdateOrder({
     onSuccessCallback: () => {
       closeModal();
@@ -22,16 +31,55 @@ export default function OrderTableData() {
   });
 
   const { verify } = useVerifyPayment({
-    onSuccessCallback: () => {
-      // Data will be refreshed by query invalidation in hook
-      // Modal is closed in handleVerifyPayment
+    onSuccessCallback: (response: any) => {
+      // API returns { data: order }
+      const updatedOrder = response?.data;
+      if (updatedOrder) {
+        setPayloadData({
+          id: updatedOrder.id,
+          status: updatedOrder.status,
+          payment_status: updatedOrder.payment_status,
+          user_name: updatedOrder.user_name,
+          user_phone: updatedOrder.user_phone,
+          user_email: updatedOrder.user_email,
+          service_name: updatedOrder.service_name,
+          service_id: updatedOrder.service_id,
+          category_id: updatedOrder.category_id,
+          price_service: updatedOrder.price_service,
+          problem_note: updatedOrder.problem_note,
+          address_text: updatedOrder.address_text,
+          payment_proof: updatedOrder.payment_proof,
+          technician_id: updatedOrder.technician_id,
+          technician_name: updatedOrder.technician_name,
+        });
+      }
+      setErrors({});
     },
   });
 
   const { assign } = useAssignTechnician({
-    onSuccessCallback: () => {
-      closeModal();
-      setPayloadData(defaultValues);
+    onSuccessCallback: (response: any) => {
+      // API returns { data: order }
+      const updatedOrder = response?.data;
+      if (updatedOrder) {
+        setPayloadData({
+          id: updatedOrder.id,
+          status: updatedOrder.status,
+          payment_status: updatedOrder.payment_status,
+          user_name: updatedOrder.user_name,
+          user_phone: updatedOrder.user_phone,
+          user_email: updatedOrder.user_email,
+          service_name: updatedOrder.service_name,
+          service_id: updatedOrder.service_id,
+          category_id: updatedOrder.category_id,
+          price_service: updatedOrder.price_service,
+          problem_note: updatedOrder.problem_note,
+          address_text: updatedOrder.address_text,
+          payment_proof: updatedOrder.payment_proof,
+          technician_id: updatedOrder.technician_id,
+          technician_name: updatedOrder.technician_name,
+        });
+      }
       setErrors({});
     },
   });
@@ -60,6 +108,7 @@ export default function OrderTableData() {
       user_email: data.user_email,
       service_name: data.service_name,
       service_id: data.service_id,
+      category_id: data.category_id,
       price_service: data.price_service,
       problem_note: data.problem_note,
       address_text: data.address_text,
@@ -80,6 +129,7 @@ export default function OrderTableData() {
       user_email: data.user_email,
       service_name: data.service_name,
       service_id: data.service_id,
+      category_id: data.category_id,
       price_service: data.price_service,
       problem_note: data.problem_note,
       address_text: data.address_text,
@@ -106,10 +156,28 @@ export default function OrderTableData() {
   // handle verify payment
   const handleVerifyPayment = async (orderId: string, approve: boolean) => {
     try {
-      await verify.mutateAsync({ id: orderId, approve });
-      // Close modal after successful verification
-      closeModal();
-      setPayloadData(defaultValues);
+      const result = await verify.mutateAsync({ id: orderId, approve });
+      // Sync full payload from result to trigger immediate UI transition
+      if (result?.data) {
+        const updatedOrder = result.data;
+        setPayloadData({
+          id: updatedOrder.id,
+          status: updatedOrder.status,
+          payment_status: updatedOrder.payment_status,
+          user_name: updatedOrder.user_name,
+          user_phone: updatedOrder.user_phone,
+          user_email: updatedOrder.user_email,
+          service_name: updatedOrder.service_name,
+          service_id: updatedOrder.service_id,
+          category_id: updatedOrder.category_id,
+          price_service: updatedOrder.price_service,
+          problem_note: updatedOrder.problem_note,
+          address_text: updatedOrder.address_text,
+          payment_proof: updatedOrder.payment_proof,
+          technician_id: updatedOrder.technician_id,
+          technician_name: updatedOrder.technician_name,
+        });
+      }
       setErrors({});
     } catch (error) {
       console.error("Error verifying payment:", error);
@@ -121,7 +189,28 @@ export default function OrderTableData() {
     technicianId: string,
   ) => {
     try {
-      await assign.mutateAsync({ id: orderId, technicianId });
+      const result = await assign.mutateAsync({ id: orderId, technicianId });
+      // Sync full payload from result to trigger immediate UI transition to Stage 3
+      if (result?.data) {
+        const updatedOrder = result.data;
+        setPayloadData({
+          id: updatedOrder.id,
+          status: updatedOrder.status,
+          payment_status: updatedOrder.payment_status,
+          user_name: updatedOrder.user_name,
+          user_phone: updatedOrder.user_phone,
+          user_email: updatedOrder.user_email,
+          service_name: updatedOrder.service_name,
+          service_id: updatedOrder.service_id,
+          category_id: updatedOrder.category_id,
+          price_service: updatedOrder.price_service,
+          problem_note: updatedOrder.problem_note,
+          address_text: updatedOrder.address_text,
+          payment_proof: updatedOrder.payment_proof,
+          technician_id: updatedOrder.technician_id,
+          technician_name: updatedOrder.technician_name,
+        });
+      }
     } catch (error) {
       console.error("Error assigning technician:", error);
     }
@@ -186,10 +275,11 @@ export default function OrderTableData() {
         isOpen={isOpenDeleteModal}
         onClose={closeDeleteModal}
         onSubmit={() => {
-          // Delete logic akan ditambahkan jika dibutuhkan
-          toast.info("Delete functionality akan ditambahkan");
+          if (payloadData.id) {
+            deleted.mutate(payloadData.id);
+          }
         }}
-        isPending={false}
+        isPending={deleted.isPending}
         title="Hapus Order"
         selectedData={payloadData}
       />

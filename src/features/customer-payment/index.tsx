@@ -4,6 +4,7 @@ import { useParams } from "next/navigation";
 import LeftForm from "./components/left-form";
 import PaymentSummary from "./components/payment-summary";
 import { useGetDetailOrder } from "./hooks/use-get-detail-order";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function CustomerPaymentData() {
   const param = useParams();
@@ -11,8 +12,19 @@ export default function CustomerPaymentData() {
 
   const [fileReceipt, setFileReceipt] = useState<File | null>(null);
 
-  const { data: detailOrderData } = useGetDetailOrder(orderId);
+  const { data: detailOrderData, isLoading } = useGetDetailOrder(orderId);
   console.log("data", detailOrderData);
+
+  if (isLoading) {
+    return (
+      <div className="container mx-auto px-4 py-12 md:py-20">
+        <div className="flex flex-col gap-8 lg:flex-row">
+          <Skeleton className="h-[600px] w-full lg:w-3/5 rounded-3xl" />
+          <Skeleton className="h-[400px] w-full lg:w-2/5 rounded-3xl" />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <section className="w-full bg-slate-50 py-12 dark:bg-background md:py-20">

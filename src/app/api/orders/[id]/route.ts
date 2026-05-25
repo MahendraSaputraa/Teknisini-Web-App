@@ -6,6 +6,7 @@ import {
   updateOrderStatus,
   uploadPaymentProof,
   verifyPayment,
+  deleteOrder,
 } from "@/lib/services/orderService"
 import { AppError } from "@/lib/services/errors"
 
@@ -17,9 +18,11 @@ type OrderAction =
 
 function handleApiError(error: unknown) {
   if (error instanceof AppError) {
+    console.error(`[API Error] ${error.statusCode}: ${error.message}`);
     return NextResponse.json({ error: error.message }, { status: error.statusCode })
   }
 
+  console.error(`[Internal Error]`, error);
   return NextResponse.json({ error: "Internal server error" }, { status: 500 })
 }
 
@@ -77,6 +80,19 @@ export async function PATCH(
     }
 
     throw new AppError("Unsupported action", 400)
+  } catch (error) {
+    return handleApiError(error)
+  }
+}
+
+export async function DELETE(
+  _request: Request,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  try {
+    const { id } = await params
+    await deleteOrder(id)
+    return NextResponse.json({ success: true }, { status: 200 })
   } catch (error) {
     return handleApiError(error)
   }

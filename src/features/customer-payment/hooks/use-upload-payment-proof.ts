@@ -31,7 +31,7 @@ export const useUploadPaymentProof = ({
         description:
           "Bukti pembayaran Anda telah diunggah dan sedang diverifikasi.",
       });
-      route.push(`customer/order/status/${orderId}`);
+      route.push(`/customer/order/status/${orderId}`);
       onSuccess?.();
     },
     onError: (error: any) => {

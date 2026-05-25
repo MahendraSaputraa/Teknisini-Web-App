@@ -13,12 +13,20 @@ export default function HeaderDetail({
   serviceName,
   paymentStatus,
 }: HeaderDetailProps) {
-  const paymentLabel =
-    paymentStatus === "paid"
-      ? "Telah Dibayar"
-      : paymentStatus === "pending"
-        ? "Belum Dibayar"
-        : "Menunggu Pembayaran";
+  const getPaymentConfig = () => {
+    switch (paymentStatus) {
+      case "paid":
+        return { label: "Lunas", className: "bg-green-600" };
+      case "waiting_verification":
+        return { label: "Menunggu Verifikasi", className: "bg-yellow-600" };
+      case "rejected":
+        return { label: "Pembayaran Ditolak", className: "bg-red-600" };
+      default:
+        return { label: "Belum Dibayar", className: "bg-slate-500" };
+    }
+  };
+
+  const payment = getPaymentConfig();
 
   return (
     <div className="mb-8 flex flex-col items-start justify-between gap-4 md:flex-row md:items-end">
@@ -41,8 +49,8 @@ export default function HeaderDetail({
       </div>
 
       <div className="flex flex-wrap items-center gap-3">
-        <span className="rounded-md bg-primary px-4 py-2 text-sm font-bold text-primary-foreground shadow-sm">
-          {paymentLabel}
+        <span className={`rounded-md px-4 py-2 text-sm font-bold text-white shadow-sm ${payment.className}`}>
+          {payment.label}
         </span>
         {serviceName && (
           <span className="rounded-md bg-slate-200 px-4 py-2 text-sm font-semibold text-slate-700 dark:bg-muted dark:text-muted-foreground">

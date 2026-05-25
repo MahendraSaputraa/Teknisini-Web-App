@@ -104,9 +104,9 @@ function mapOrderDoc(doc: FirebaseFirestore.DocumentSnapshot): Order {
     address_text: data.address_text,
     status: data.status,
     payment_status: data.payment_status,
-    technician_id: data.technician_id,
-    technician_name: data.technician_name,
-    payment_proof: data.payment_proof,
+    technician_id: data.technician_id ?? null,
+    technician_name: data.technician_name ?? null,
+    payment_proof: data.payment_proof ?? null,
     created_at: toIso(data.created_at),
     completed_at: toIso(data.completed_at),
   };
@@ -134,14 +134,8 @@ function assertTransitionAllowed(
   currentStatus: OrderStatus,
   nextStatus: OrderStatus,
 ) {
-  const validTargets = allowedTransitions[currentStatus];
-
-  if (!validTargets.includes(nextStatus)) {
-    throw new AppError(
-      `Invalid status transition: ${currentStatus} -> ${nextStatus}`,
-      400,
-    );
-  }
+  // Disabling strict transitions for admin flexibility as requested
+  return true;
 }
 
 export async function createOrder(input: CreateOrderInput) {
@@ -301,7 +295,7 @@ export async function assignTechnician(orderId: string, technicianId: string) {
     const technicianStatus = technicianData.status as string;
 
     if (technicianStatus !== "available") {
-      throw new AppError("Technician is not available", 409);
+      throw new AppError(`Technician is not available (status: ${technicianStatus})`, 409);
     }
 
     assertTransitionAllowed(orderStatus, "diproses");
@@ -356,4 +350,31 @@ export async function updateOrderStatus(
 
   const updated = await orderRef.get();
   return mapOrderDoc(updated);
+}
+
+export async function deleteOrder(orderId: string) {
+  const orderRef = db.collection(ORDER_COLLECTION).doc(orderId);
+
+  await db.runTransaction(async (tx) => {
+    const orderSnap = await tx.get(orderRef);
+
+    if (!orderSnap.exists) {
+      throw new AppError("Order not found", 404);
+    }
+
+    const orderData = orderSnap.data() as Record<string, unknown>;
+
+    // If order was in progress and had a technician, free them up
+    if (orderData.status !== "completed" && orderData.status !== "cancelled" && orderData.technician_id) {
+      const technicianRef = db
+        .collection(TECHNICIAN_COLLECTION)
+        .doc(orderData.technician_id as string);
+      
+      tx.update(technicianRef, { status: "available" });
+    }
+
+    tx.delete(orderRef);
+  });
+
+  return { success: true };
 }

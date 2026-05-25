@@ -9,7 +9,7 @@ export function useAssignTechnician({ onSuccessCallback }: any = {}) {
     mutationFn: ({ id, technicianId }: any) =>
       assignTechnician(id, technicianId),
     onSuccess: (res) => {
-      queryClient.invalidateQueries({ queryKey: ["admin-order"] });
+      queryClient.invalidateQueries({ queryKey: ["orders"] });
       toast.success("Teknisi berhasil di-assign");
       onSuccessCallback?.(res?.data);
     },

@@ -6,10 +6,10 @@ export function useDeleteTechnician({ onSuccessCallback }: any = {}) {
   const queryClient = useQueryClient();
 
   const deleted = useMutation({
-    mutationFn: (id: any) => deleteTechnician(id),
-    onSuccess: (res) => {
+    mutationFn: (id: string) => deleteTechnician(id),
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["admin-technician"] });
-      toast.success(res.message || "Berhasil Membuat Teknisi");
+      toast.success("Teknisi berhasil dihapus");
       onSuccessCallback?.();
     },
     onError: (error: any) => {

@@ -69,7 +69,7 @@ export function CreateEditModal({
       .filter(
         (tech: any) =>
           tech.status === "available" &&
-          tech.category === payloadData.service_id,
+          tech.category === payloadData.category_id,
       )
       .map((tech: any) => ({
         label: tech.name,
@@ -105,6 +105,11 @@ export function CreateEditModal({
   const isPaymentPending =
     payloadData.payment_status === "pending" ||
     payloadData.payment_status === "waiting_verification";
+
+  // Deteksi apakah order sudah masuk tahap pengerjaan (teknisi sudah di-assign)
+  // Status 'pending' berarti belum di-assign. 
+  // Selain itu, kita cek apakah technician_id sudah terisi.
+  const isAssigned = payloadData.status !== "pending" && !!payloadData.technician_id;
 
   const getPaymentStatusBadgeColor = () => {
     if (isPaymentPending) return "outline";
@@ -335,8 +340,8 @@ export function CreateEditModal({
               </div>
             )}
 
-            {/* // Ubah STAGE 2 menjadi seperti ini: */}
-            {mode === "edit" && isPaymentApproved && (
+            {/* STAGE 2: Assign Teknisi (Only if payment approved AND no technician assigned yet) */}
+            {mode === "edit" && isPaymentApproved && !isAssigned && (
               <div>
                 <h3 className="text-sm font-semibold mb-3 flex items-center gap-2">
                   <CheckCircle2 className="h-4 w-4 text-green-600" />
@@ -349,25 +354,10 @@ export function CreateEditModal({
                     options={technicianOptions}
                     value={payloadData.technician_id}
                     onChange={handleTechnicianSelect}
-                    disabled={
-                      isTechnicianLoading || !!payloadData.technician_id
-                    } // lock setelah assigned
+                    disabled={isTechnicianLoading}
                     error={errors?.technician_id?.[0]}
                   />
 
-                  {payloadData.technician_id && (
-                    <FormInput
-                      label="Nama Teknisi"
-                      name="technician_name"
-                      type="text"
-                      placeholder="Nama teknisi akan diisi otomatis"
-                      disabled
-                      value={payloadData.technician_name}
-                      error={errors?.technician_name?.[0]}
-                    />
-                  )}
-
-                  {/* Tombol assign — hanya muncul kalau teknisi dipilih tapi belum di-assign ke DB */}
                   {payloadData.technician_id && (
                     <Button
                       className="w-full"
@@ -380,20 +370,31 @@ export function CreateEditModal({
                       disabled={isAssigning}
                     >
                       {isAssigning && <Spinner className="mr-2 h-4 w-4" />}
-                      Assign Teknisi
+                      Konfirmasi Penugasan Teknisi
                     </Button>
                   )}
                 </div>
               </div>
             )}
 
-            {/* STAGE 3: Order Status (only after technician assigned) */}
-            {mode === "edit" && payloadData.technician_id && (
+            {/* STAGE 3: Order Status (Shown once technician is assigned) */}
+            {mode === "edit" && isAssigned && (
               <div>
-                <h3 className="text-sm font-semibold mb-3">Status Order</h3>
+                <h3 className="text-sm font-semibold mb-3 flex items-center gap-2">
+                  <CheckCircle2 className="h-4 w-4 text-blue-600" />
+                  Kelola Progres Pekerjaan
+                </h3>
                 <div className="space-y-4">
+                  <div className="p-3 bg-blue-50 border border-blue-100 rounded-lg flex items-center justify-between">
+                    <div>
+                      <p className="text-xs text-blue-600 font-medium">Teknisi Ditugaskan</p>
+                      <p className="text-sm font-bold text-blue-900">{payloadData.technician_name || "Nama teknisi tidak tersedia"}</p>
+                    </div>
+                    <Badge variant="outline" className="bg-white">Aktif</Badge>
+                  </div>
+
                   <FormSelect
-                    label="Status Order"
+                    label="Status Progres Order"
                     name="status"
                     placeholder="Pilih status"
                     value={payloadData.status}
@@ -428,7 +429,7 @@ export function CreateEditModal({
               Tutup
             </Button>
           </DialogClose>
-          {mode === "edit" && payloadData.technician_id && (
+          {mode === "edit" && isAssigned && (
             <Button onClick={onSubmit} disabled={isPending}>
               {isPending && <Spinner className="mr-2 h-4 w-4" />}
               Perbarui Order

@@ -18,11 +18,12 @@ export const payloadSchema = z.object({
   service_name: z.string().min(3, "Nama layanan minimal 3 karakter"),
   price_service: z.number().positive("Harga harus lebih dari 0"),
   problem_note: z.string().optional(),
+  category_id: z.string().optional(),
   service_id: z.string().optional(),
   address_text: z.string().optional(),
-  payment_proof: z.string().optional(),
-  technician_id: z.string().optional(),
-  technician_name: z.string().optional(),
+  payment_proof: z.string().optional().nullable(),
+  technician_id: z.string().optional().nullable(),
+  technician_name: z.string().optional().nullable(),
 });
 
 export type PayloadData = z.infer<typeof payloadSchema>;
@@ -37,6 +38,8 @@ export const defaultValues: PayloadData = {
   service_name: "",
   price_service: 0,
   problem_note: "",
+  category_id: "",
+  service_id: "",
   address_text: "",
   payment_proof: "",
   technician_id: "",

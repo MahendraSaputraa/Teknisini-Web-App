@@ -3,7 +3,7 @@ import { getOrderById } from "@/services/order";
 
 export const useGetDetailOrder = (id: string) => {
   return useQuery({
-    queryKey: ["order-detail", id],
+    queryKey: ["orders", id],
     queryFn: async () => {
       console.log("[useGetDetailOrder] Fetching order with id:", id);
       const res = await getOrderById(id);
@@ -11,7 +11,8 @@ export const useGetDetailOrder = (id: string) => {
       return res;
     },
     enabled: !!id,
-    staleTime: 1000 * 30,
-    refetchOnWindowFocus: false,
+    staleTime: 1000 * 10, // 10 seconds
+    refetchInterval: 5000, // Auto refetch every 5 seconds for real-time updates
+    refetchOnWindowFocus: true,
   });
 };

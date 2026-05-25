@@ -128,7 +128,9 @@ export default function ServiceTableData() {
 
   const handleDelete = async () => {
     try {
-      await deleted.mutateAsync(payloadData.id);
+      if (payloadData.id) {
+        await deleted.mutateAsync(payloadData.id);
+      }
     } catch (error) {
       console.error("Error:", error);
     }

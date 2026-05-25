@@ -13,15 +13,15 @@ import {
 } from "lucide-react";
 import { formatRupiah } from "@/lib/utils";
 
-// Status order: pending → confirmed → on_the_way → completed / cancelled
+// Status order: pending → diproses → menuju_lokasi → completed / cancelled
 const STEPS = [
-  { key: "pending", label: "Dikonfirmasi", icon: Check },
-  { key: "confirmed", label: "Teknisi Didapat", icon: Check },
-  { key: "on_the_way", label: "Menuju Lokasi", icon: Briefcase },
+  { key: "pending", label: "Menunggu Konfirmasi", icon: Check },
+  { key: "diproses", label: "Teknisi Didapat", icon: Check },
+  { key: "menuju_lokasi", label: "Menuju Lokasi", icon: Briefcase },
   { key: "completed", label: "Selesai", icon: CheckCircle2 },
 ];
 
-const STATUS_ORDER = ["pending", "confirmed", "on_the_way", "completed"];
+const STATUS_ORDER = ["pending", "diproses", "menuju_lokasi", "completed"];
 
 function getStepIndex(status: string) {
   const idx = STATUS_ORDER.indexOf(status);

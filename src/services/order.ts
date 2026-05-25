@@ -25,6 +25,7 @@ export interface CreateOrderPayload {
   user_name: string;
   user_phone: string;
   user_email: string;
+  category_id: string;
   service_id: string;
   service_name: string;
   price_service: number;
@@ -91,6 +92,11 @@ export const updateOrderStatus = async (
     action: "update_status",
     status,
   });
+  return res.data;
+};
+
+export const deleteOrder = async (orderId: string) => {
+  const res = await api.delete(`/orders/${orderId}`);
   return res.data;
 };
 

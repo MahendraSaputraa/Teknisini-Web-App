@@ -3,7 +3,7 @@ import { getOrders } from "@/services/order";
 
 export const useOrderList = (params: any) => {
   return useQuery({
-    queryKey: ["admin-order", params],
+    queryKey: ["orders", params],
     queryFn: async () => {
       const res = await getOrders(params);
       return res;

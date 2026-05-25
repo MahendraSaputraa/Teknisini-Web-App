@@ -16,7 +16,7 @@ export function useUpdateOrder({ onSuccessCallback }: any = {}) {
       return Promise.reject("Invalid payload");
     },
     onSuccess: (res) => {
-      queryClient.invalidateQueries({ queryKey: ["admin-order"] });
+      queryClient.invalidateQueries({ queryKey: ["orders"] });
       toast.success("Order berhasil diperbarui");
       onSuccessCallback?.();
     },

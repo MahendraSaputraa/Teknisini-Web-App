@@ -10,7 +10,7 @@ export default function CustomerOrderTrackingDetailData() {
   const searchParams = useSearchParams();
   const orderId = searchParams.get("id") as string;
 
-  console.log("hai", orderId);
+  console.log("orderId from searchParams:", orderId);
 
   const { data: orderData, isLoading } = useGetDetailOrder(orderId);
   const order = orderData?.data;

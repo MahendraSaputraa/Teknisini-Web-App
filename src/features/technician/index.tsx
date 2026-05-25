@@ -7,7 +7,7 @@ import { CreateEditModal } from "./components/create-edit-modal";
 import { useModal } from "@/hooks/use-modal";
 import { payloadSchema, defaultValues, PayloadData } from "./schema";
 import { useCreateTechnician } from "./hooks/use-create";
-import { useUpdateUser } from "./hooks/use-update";
+import { useUpdateTechnician } from "./hooks/use-update";
 import { DeleteModal } from "@/components/modal/delete-modal";
 import { useDeleteTechnician } from "./hooks/use-delete";
 import { toast } from "sonner";
@@ -21,7 +21,7 @@ export default function TechnicianTableData() {
       setErrors({});
     },
   });
-  const { update } = useUpdateUser({
+  const { update } = useUpdateTechnician({
     onSuccessCallback: () => {
       closeModal();
       setPayloadData(defaultValues);
@@ -57,8 +57,8 @@ export default function TechnicianTableData() {
       phone: data.phone,
       category: data.category,
       status: data.status,
-      rating_avg: 0,
-      total_reviews: 0,
+      rating_avg: data.rating_avg || 0,
+      total_reviews: data.total_reviews || 0,
     });
     openModal();
   };
@@ -71,15 +71,13 @@ export default function TechnicianTableData() {
       phone: data.phone,
       category: data.category,
       status: data.status,
-      rating_avg: 0,
-      total_reviews: 0,
+      rating_avg: data.rating_avg || 0,
+      total_reviews: data.total_reviews || 0,
     });
     openModal();
   };
 
   const handleSubmitModal = async () => {
-    console.log("error", errors);
-
     const result = payloadSchema.safeParse(payloadData);
     if (!result.success) {
       const fieldErrors = result.error.flatten().fieldErrors;
@@ -94,13 +92,13 @@ export default function TechnicianTableData() {
     if (modalMode === "edit") {
       const { id, ...rest } = payloadData;
 
-      update.mutate({ id, rest });
+      update.mutate({ id, payload: rest });
     }
   };
   const handleDeleteModal = () => {
     if (!payloadData?.id) return toast.error("Tidak ada data yang dipilih.");
 
-    deleted.mutate({ id: payloadData.id });
+    deleted.mutate(payloadData.id);
   };
 
   // table data

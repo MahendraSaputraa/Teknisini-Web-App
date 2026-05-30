@@ -18,14 +18,14 @@ export default function Hero() {
 
             {/* Headline */}
             <h1 className="text-4xl font-extrabold tracking-tight text-foreground sm:text-5xl md:text-6xl lg:leading-[1.1]">
-              Butuh Teknisi? <br />
-              <span className="text-primary">Kami Siap Membantu</span>
+              Jasa Teknisi Panggilan <br />
+              <span className="text-primary">Terbaik & Tercepat di Bali</span>
             </h1>
 
             {/* Deskripsi */}
             <p className="max-w-[550px] text-lg leading-relaxed text-muted-foreground md:text-xl">
-              Layanan teknisi terpercaya, cepat, dan praktis langsung ke lokasi
-              Anda. Temukan solusi teknis terbaik dengan satu klik.
+              Butuh teknisi? Kami menyediakan layanan teknisi terpercaya, cepat, dan praktis langsung ke lokasi
+              Anda di seluruh Bali. Solusi perbaikan elektronik dan listrik dalam satu klik.
             </p>
 
             {/* Action Buttons */}
@@ -54,7 +54,7 @@ export default function Hero() {
               {/* Ganti src ini dengan gambar aslimu yang ada di folder public */}
               <img
                 src="/images/Hero-Teknisini.jpg"
-                alt="Teknisi Tersenyum"
+                alt="TekniSini - Jasa Teknisi Panggilan Cepat dan Terpercaya di Bali"
                 className="h-full w-full object-cover object-center"
               />
 

@@ -35,7 +35,7 @@ export default function StepSection() {
             {/* Ganti dengan <Image /> Next.js untuk performa terbaik */}
             <img
               src="/images/Step-Teknisini.jpg"
-              alt="Teknisi profesional melayani pelanggan"
+              alt="Langkah mudah memesan jasa teknisi panggilan di Bali melalui TekniSini"
               className="relative z-10 aspect-square w-full object-cover object-center rounded-[2.5rem] shadow-md sm:aspect-[4/5] lg:aspect-square"
             />
           </div>

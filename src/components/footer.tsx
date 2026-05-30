@@ -14,8 +14,35 @@ export default function Footer() {
           <div className="flex flex-col gap-4">
             <h2 className="text-xl font-bold text-foreground">TekniSini</h2>
             <p className="max-w-xs text-sm leading-relaxed text-muted-foreground">
-              Solusi digital untuk layanan teknis terbaik. Menghubungkan Anda dengan keahlian teknis terbaik kami.
+              Jasa teknisi panggilan terbaik di Bali. Solusi praktis untuk service AC, kulkas, listrik, dan perbaikan elektronik lainnya langsung ke lokasi Anda.
             </p>
+          </div>
+
+          {/* Kolom 2: Layanan Kami */}
+          <div className="flex flex-col gap-4">
+            <h3 className="text-sm font-bold text-foreground">Layanan Kami</h3>
+            <ul className="flex flex-col gap-3">
+              <li>
+                <Link href="/customer/booking" className="text-sm text-muted-foreground transition-colors hover:text-primary">
+                  Service AC Bali
+                </Link>
+              </li>
+              <li>
+                <Link href="/customer/booking" className="text-sm text-muted-foreground transition-colors hover:text-primary">
+                  Service Kulkas & Mesin Cuci
+                </Link>
+              </li>
+              <li>
+                <Link href="/customer/booking" className="text-sm text-muted-foreground transition-colors hover:text-primary">
+                  Teknisi Listrik Panggilan
+                </Link>
+              </li>
+              <li>
+                <Link href="/customer/booking" className="text-sm text-muted-foreground transition-colors hover:text-primary">
+                  Perbaikan Pompa Air & Pipa
+                </Link>
+              </li>
+            </ul>
           </div>
 
           {/* Kolom 2: Navigasi */}

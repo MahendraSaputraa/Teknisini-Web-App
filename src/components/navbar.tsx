@@ -55,7 +55,7 @@ export default function Navbar({ user }: any) {
             <img
               className="w-full h-5"
               src="/images/logo-TekniSini.png"
-              alt=""
+              alt="TekniSini Logo"
             />
           </Link>
         </div>

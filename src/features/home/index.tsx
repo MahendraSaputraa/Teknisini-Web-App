@@ -1,3 +1,4 @@
+"use client";
 import CtaSection from "./components/cta-section";
 import Hero from "./components/hero";
 import StepSection from "./components/step-section";

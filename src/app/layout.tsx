@@ -6,6 +6,7 @@ import AppQueryProvider from "@/providers/app-query-provider";
 import ThemeProvider from "@/providers/theme-provider";
 import AuthProvider from "@/providers/auth-provider";
 import JsonLd from "@/components/json-ld";
+import { Analytics } from "@vercel/analytics/react";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -116,6 +117,7 @@ export default function RootLayout({
             <AuthProvider>{children}</AuthProvider>
           </ThemeProvider>
         </AppQueryProvider>
+        <Analytics />
       </body>
     </html>
   );

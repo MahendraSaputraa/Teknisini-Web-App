@@ -27,6 +27,8 @@ import {
 import { useEffect, useState } from "react";
 import { useOrderList } from "./use-list";
 import { Badge } from "@/components/ui/badge";
+import { formatRupiah } from "@/lib/utils";
+import { calculateOrderGrandTotal } from "@/lib/pricing";
 
 export function useTableData({ onEdit, onDelete }: any) {
   const [currentPage, setCurrentPage] = useState(1);
@@ -116,12 +118,14 @@ export function useTableData({ onEdit, onDelete }: any) {
         },
       },
       {
-        accessorKey: "price_service",
-        header: "Harga",
+        accessorKey: "total_price",
+        header: "Total Harga",
         cell: ({ row }) => {
           return (
-            <div className="ps-3">
-              Rp {row.original.price_service?.toLocaleString("id-ID") || 0}
+            <div className="ps-3 font-medium">
+              {formatRupiah(
+                calculateOrderGrandTotal(row.original.total_price),
+              )}
             </div>
           );
         },

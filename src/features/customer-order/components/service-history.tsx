@@ -12,6 +12,7 @@ import React, { useState } from "react";
 import { formatRupiah } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { ReviewModal } from "./review-modal";
+import { calculateOrderGrandTotal } from "@/lib/pricing";
 
 interface ServiceHistoryProps {
   data?: any[];
@@ -188,7 +189,9 @@ export default function ServiceHistory({
                     </span>
                     <span className="flex items-center gap-1">
                       <Star className="h-3 w-3" />{" "}
-                      {formatRupiah(order?.total_price + 25000)}
+                      {formatRupiah(
+                        calculateOrderGrandTotal(order?.total_price),
+                      )}
                     </span>
                   </div>
                 </div>

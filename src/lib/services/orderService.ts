@@ -1,6 +1,7 @@
 import { Timestamp } from "firebase-admin/firestore";
 import { db } from "@/lib/firebase";
 import { AppError } from "@/lib/services/errors";
+import { calculatePlatformFee } from "@/lib/pricing";
 
 export type OrderStatus =
   | "pending"
@@ -64,7 +65,6 @@ export interface CreateOrderInput {
 
 const ORDER_COLLECTION = "orders";
 const TECHNICIAN_COLLECTION = "technicians";
-const PLATFORM_FEE_RATE = 0.25;
 
 const allowedTransitions: Record<OrderStatus, OrderStatus[]> = {
   pending: ["diproses", "cancelled"],
@@ -212,7 +212,7 @@ export async function createOrder(input: CreateOrderInput) {
   ensureRequiredCreateFields(input);
 
   const priceService = input.price_service as number;
-  const platformFee = Number((priceService * PLATFORM_FEE_RATE).toFixed(2));
+  const platformFee = calculatePlatformFee(priceService);
   const totalPrice = Number((priceService + platformFee).toFixed(2));
 
   const payload = {
@@ -251,24 +251,33 @@ export interface ListOrdersFilter {
 }
 
 export async function listOrders(filter?: ListOrdersFilter) {
-  let query: FirebaseFirestore.Query = db
-    .collection(ORDER_COLLECTION)
-    .orderBy("created_at", "desc");
+  let query: FirebaseFirestore.Query = db.collection(ORDER_COLLECTION);
 
+  // Keep the Firestore query on a single indexed field. Combining user_id
+  // filters with created_at ordering requires a manually-created composite
+  // index and caused GET /orders?user_id=... to fail in production.
   if (filter?.user_id) {
     query = query.where("user_id", "==", filter.user_id);
-  }
-
-  if (filter?.status) {
+  } else if (filter?.status) {
     query = query.where("status", "==", filter.status);
-  }
-
-  if (filter?.payment_status) {
+  } else if (filter?.payment_status) {
     query = query.where("payment_status", "==", filter.payment_status);
   }
 
   const snapshot = await query.get();
-  return snapshot.docs.map(mapOrderDoc);
+  return snapshot.docs
+    .map(mapOrderDoc)
+    .filter((order) => !filter?.status || order.status === filter.status)
+    .filter(
+      (order) =>
+        !filter?.payment_status ||
+        order.payment_status === filter.payment_status,
+    )
+    .sort((a, b) => {
+      const aTime = a.created_at ? Date.parse(a.created_at) : 0;
+      const bTime = b.created_at ? Date.parse(b.created_at) : 0;
+      return bTime - aTime;
+    });
 }
 
 export async function getOrderById(orderId: string) {

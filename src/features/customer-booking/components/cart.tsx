@@ -3,10 +3,13 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { formatRupiah } from "@/lib/utils";
 import { ArrowRight, Award, Clock, Info, ShieldCheck } from "lucide-react";
+import {
+  calculateGrandTotalFromServicePrice,
+  calculateOrderSubtotal,
+  TRANSPORT_FEE,
+} from "@/lib/pricing";
 
 export default function Cart({ handleSubmit, isPending, formData }: any) {
-  const PLATFORM_FEE = 0.25;
-  const TRANSPORT = 25000;
   return (
     <div className="flex w-full flex-col gap-6 lg:sticky lg:top-24 lg:w-1/3">
       <Card className="border-none shadow-md sm:rounded-3xl">
@@ -21,8 +24,7 @@ export default function Cart({ handleSubmit, isPending, formData }: any) {
               <span>Biaya Layanan</span>
               <span className="font-semibold text-foreground">
                 {formatRupiah(
-                  formData?.price_service +
-                    formData?.price_service * PLATFORM_FEE,
+                  calculateOrderSubtotal(formData?.price_service || 0),
                 )}
               </span>
             </div>
@@ -30,7 +32,9 @@ export default function Cart({ handleSubmit, isPending, formData }: any) {
               <span className="flex items-center gap-1">
                 Transport <Info className="h-3 w-3" />
               </span>
-              <span className="font-semibold text-foreground">Rp 25.000</span>
+              <span className="font-semibold text-foreground">
+                {formatRupiah(TRANSPORT_FEE)}
+              </span>
             </div>
           </div>
 
@@ -44,9 +48,9 @@ export default function Cart({ handleSubmit, isPending, formData }: any) {
             <div className="flex flex-col items-end">
               <span className="text-2xl font-bold text-primary">
                 {formatRupiah(
-                  formData?.price_service +
-                    TRANSPORT +
-                    formData?.price_service * PLATFORM_FEE,
+                  calculateGrandTotalFromServicePrice(
+                    formData?.price_service || 0,
+                  ),
                 )}
               </span>
             </div>

@@ -7,6 +7,7 @@ function handleApiError(error: unknown) {
     return NextResponse.json({ error: error.message }, { status: error.statusCode })
   }
 
+  console.error("[GET/POST /api/orders]", error)
   return NextResponse.json({ error: "Internal server error" }, { status: 500 })
 }
 

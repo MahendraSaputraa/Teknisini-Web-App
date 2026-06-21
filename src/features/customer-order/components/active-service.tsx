@@ -4,6 +4,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { ArrowRight, Clock, MapPin, Star, Truck, User } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { formatRupiah } from "@/lib/utils";
+import { calculateOrderGrandTotal } from "@/lib/pricing";
 
 interface ActiveServiceProps {
   data?: any;
@@ -121,7 +122,9 @@ export default function ActiveService({
                       Total Harga
                     </span>
                     <span className="font-bold text-foreground">
-                      {formatRupiah(order?.total_price + 25000)}
+                      {formatRupiah(
+                        calculateOrderGrandTotal(order?.total_price),
+                      )}
                     </span>
                   </div>
                 </div>

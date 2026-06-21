@@ -8,6 +8,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { calculateOrderGrandTotal } from "@/lib/pricing";
+import { formatRupiah } from "@/lib/utils";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 
@@ -59,7 +61,7 @@ export function RecentOrders({ orders }: RecentOrdersProps) {
                   <TableCell>{order.service_name}</TableCell>
                   <TableCell>{getStatusBadge(order.status)}</TableCell>
                   <TableCell className="text-right font-medium">
-                    Rp {order.total_price?.toLocaleString("id-ID")}
+                    {formatRupiah(calculateOrderGrandTotal(order.total_price))}
                   </TableCell>
                 </TableRow>
               ))

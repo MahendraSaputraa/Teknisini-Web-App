@@ -12,6 +12,7 @@ import {
   XCircle,
 } from "lucide-react";
 import { formatRupiah } from "@/lib/utils";
+import { calculateOrderGrandTotal, TRANSPORT_FEE } from "@/lib/pricing";
 
 // Status order: pending → diproses → menuju_lokasi → completed / cancelled
 const STEPS = [
@@ -193,7 +194,7 @@ export default function ServiceDetail({ order }: ServiceDetailProps) {
               <div className="flex justify-between text-muted-foreground">
                 <span>Transport</span>
                 <span className="font-medium text-foreground">
-                  {formatRupiah(25000)}
+                  {formatRupiah(TRANSPORT_FEE)}
                 </span>
               </div>
             </div>
@@ -201,7 +202,7 @@ export default function ServiceDetail({ order }: ServiceDetailProps) {
             <div className="flex justify-between">
               <span className="font-bold text-foreground">Total Tagihan</span>
               <span className="text-lg font-bold text-primary">
-                {formatRupiah(order?.total_price + 25000 || 0)}
+                {formatRupiah(calculateOrderGrandTotal(order?.total_price))}
               </span>
             </div>
           </CardContent>

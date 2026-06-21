@@ -5,6 +5,7 @@ import { formatRupiah } from "@/lib/utils";
 import { Lock, Send } from "lucide-react";
 import { useUploadPaymentProof } from "../hooks/use-upload-payment-proof";
 import { useCancelOrder } from "../hooks/use-cancel-order";
+import { calculateOrderGrandTotal, TRANSPORT_FEE } from "@/lib/pricing";
 
 interface PaymentSummaryProps {
   detailOrderData?: any;
@@ -75,7 +76,9 @@ export default function PaymentSummary({
               <span className="font-medium text-muted-foreground">
                 Transport
               </span>
-              <span className="font-bold text-foreground">Rp25.000</span>
+              <span className="font-bold text-foreground">
+                {formatRupiah(TRANSPORT_FEE)}
+              </span>
             </div>
           </div>
 
@@ -88,7 +91,9 @@ export default function PaymentSummary({
             </span>
             <div className="flex items-end justify-between">
               <span className="text-3xl font-extrabold text-foreground sm:text-4xl">
-                {formatRupiah(detailOrderData?.total_price + 25000 || 0)}
+                {formatRupiah(
+                  calculateOrderGrandTotal(detailOrderData?.total_price),
+                )}
               </span>
               <span className="mb-1 text-[10px] font-medium text-muted-foreground">
                 Tax Included

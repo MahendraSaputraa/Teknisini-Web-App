@@ -1,5 +1,12 @@
-"use client";
 import CustomerWrapper from "@/providers/customer-provider";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  robots: {
+    index: false,
+    follow: false,
+  },
+};
 export default function CustomerLayout({
   children,
 }: Readonly<{

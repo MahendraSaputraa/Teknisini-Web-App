@@ -6,6 +6,9 @@ export const metadata: Metadata = {
   title: "TekniSini | Jasa Teknisi Panggilan Cepat & Terpercaya di Bali",
   description:
     "Layanan jasa teknisi panggilan terbaik di Bali. Hubungi teknisi ahli untuk service AC, kulkas, listrik, pipa, dan elektronik lainnya. Cepat, transparan, dan bergaransi.",
+  alternates: {
+    canonical: "/",
+  },
 };
 
 export default function Home({

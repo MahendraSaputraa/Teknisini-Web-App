@@ -2,7 +2,7 @@
 import { Dropzone } from "@/components/form-components/form-dropzone";
 import { Card, CardContent } from "@/components/ui/card";
 import { Building2, Clock, CloudUpload, Copy, Info } from "lucide-react";
-import { useParams } from "next/navigation";
+import { toast } from "sonner";
 
 interface LeftFormProps {
   fileReceipt: File | null;
@@ -10,8 +10,14 @@ interface LeftFormProps {
 }
 
 export default function LeftForm({ fileReceipt, onFileSelect }: LeftFormProps) {
-  const params = useParams();
-  const orderId = params?.id as string;
+  const copyAccountNumber = async () => {
+    try {
+      await navigator.clipboard.writeText("8830124559");
+      toast.success("Nomor rekening berhasil disalin");
+    } catch {
+      toast.error("Nomor rekening gagal disalin");
+    }
+  };
   return (
     <div className="flex w-full flex-col gap-6 lg:w-3/5">
       {/* 1. Bank Transfer Instructions */}
@@ -54,7 +60,12 @@ export default function LeftForm({ fileReceipt, onFileSelect }: LeftFormProps) {
                   <span className="text-xl font-extrabold tracking-widest text-foreground">
                     8830 124 559
                   </span>
-                  <button className="text-muted-foreground transition-colors hover:text-primary">
+                  <button
+                    type="button"
+                    aria-label="Salin nomor rekening"
+                    onClick={copyAccountNumber}
+                    className="text-muted-foreground transition-colors hover:text-primary"
+                  >
                     <Copy className="h-5 w-5" />
                   </button>
                 </div>

@@ -23,8 +23,8 @@ import { useLogout } from "@/hooks/use-logout";
 import { ModeToggle } from "./ui/mode-toggle";
 
 const navLinks = [
-  { title: "Tentang Kami", href: "#layanan" },
-  { title: "Cara Kerja", href: "#step" },
+  { title: "Tentang Kami", href: "/#layanan" },
+  { title: "Cara Kerja", href: "/#step" },
   { title: "Buat Pesanan", href: "/customer/booking" },
   { title: "Pesanan Saya", href: "/customer/order" },
 ];

@@ -50,22 +50,22 @@ export default function Footer() {
             <h3 className="text-sm font-bold text-foreground">Navigasi</h3>
             <ul className="flex flex-col gap-3">
               <li>
-                <Link href="#" className="text-sm text-muted-foreground transition-colors hover:text-primary">
+                <Link href="/#layanan" className="text-sm text-muted-foreground transition-colors hover:text-primary">
                   Tentang Kami
                 </Link>
               </li>
               <li>
-                <Link href="#" className="text-sm text-muted-foreground transition-colors hover:text-primary">
+                <Link href="/#step" className="text-sm text-muted-foreground transition-colors hover:text-primary">
                   Cara Kerja
                 </Link>
               </li>
               <li>
-                <Link href="#" className="text-sm text-muted-foreground transition-colors hover:text-primary">
+                <Link href="/customer/booking" className="text-sm text-muted-foreground transition-colors hover:text-primary">
                   Buat Pesanan
                 </Link>
               </li>
               <li>
-                <Link href="#" className="text-sm text-muted-foreground transition-colors hover:text-primary">
+                <Link href="/customer/order" className="text-sm text-muted-foreground transition-colors hover:text-primary">
                   Pesanan Saya
                 </Link>
               </li>

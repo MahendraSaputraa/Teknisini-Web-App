@@ -3,8 +3,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { formatRupiah } from "@/lib/utils";
 import { Lock, Send } from "lucide-react";
-import { useRouter } from "next/navigation";
 import { useUploadPaymentProof } from "../hooks/use-upload-payment-proof";
+import { useCancelOrder } from "../hooks/use-cancel-order";
 
 interface PaymentSummaryProps {
   detailOrderData?: any;
@@ -19,8 +19,6 @@ export default function PaymentSummary({
   fileReceipt,
   onUploadSuccess,
 }: PaymentSummaryProps) {
-  const route = useRouter();
-
   const uploadPaymentMutation = useUploadPaymentProof({
     orderId,
     onSuccess: () => {
@@ -29,12 +27,19 @@ export default function PaymentSummary({
       // route.push("/customer/order/status");
     },
   });
+  const cancelOrderMutation = useCancelOrder(orderId);
 
   const handleUploadPaymentProof = async () => {
     if (!fileReceipt) {
       return;
     }
     await uploadPaymentMutation.mutate(fileReceipt);
+  };
+  const handleCancelOrder = () => {
+    const confirmed = window.confirm(
+      "Batalkan pesanan ini? Tindakan ini tidak dapat dibatalkan.",
+    );
+    if (confirmed) cancelOrderMutation.mutate();
   };
   return (
     <div className="flex w-full flex-col lg:sticky lg:top-24 lg:w-2/5">
@@ -106,9 +111,13 @@ export default function PaymentSummary({
 
             <Button
               variant="secondary"
+              onClick={handleCancelOrder}
+              disabled={cancelOrderMutation.isPending}
               className="w-full h-14 rounded-full bg-slate-200 text-base font-semibold text-foreground hover:bg-slate-300 dark:bg-muted dark:hover:bg-muted/80"
             >
-              Batalkan Transaksi
+              {cancelOrderMutation.isPending
+                ? "Membatalkan..."
+                : "Batalkan Transaksi"}
             </Button>
           </div>
 

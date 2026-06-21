@@ -1,15 +1,12 @@
 import { register } from "@/services/auth";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import Cookies from "js-cookie";
-import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { signInWithCustomToken } from "firebase/auth";
 import { auth } from "@/lib/firebaseClient";
 
-export const useRegister = () => {
+export const useRegister = (callbackUrl?: string) => {
   const queryClient = useQueryClient();
-  const route = useRouter();
-
   return useMutation({
     mutationFn: register,
     onSuccess: async (res) => {
@@ -20,17 +17,29 @@ export const useRegister = () => {
 
         const idToken = await userCredential.user.getIdToken();
 
-        Cookies.set("access_token", idToken, { path: "/", expires: 7 });
-        Cookies.set("role", user.role, { path: "/", expires: 7 });
+        const cookieOptions = {
+          path: "/",
+          expires: 7,
+          sameSite: "lax" as const,
+          secure: window.location.protocol === "https:",
+        };
+        Cookies.set("access_token", idToken, cookieOptions);
+        Cookies.set("role", user.role, cookieOptions);
 
         toast.success(res.message);
 
         await queryClient.invalidateQueries({ queryKey: ["current-user"] });
 
-        const destination = user.role === "admin" ? "/admin/dashboard" : "/";
- 
+        const safeCallbackUrl =
+          callbackUrl?.startsWith("/") && !callbackUrl.startsWith("//")
+            ? callbackUrl
+            : null;
+        const destination =
+          user.role === "admin"
+            ? "/admin/dashboard"
+            : (safeCallbackUrl ?? "/");
 
-      window.location.href = destination;
+        window.location.replace(destination);
       } catch (error) {
         toast.error("Gagal melakukan autentikasi dengan Firebase.");
         console.error("Firebase Auth Error:", error);

@@ -9,12 +9,14 @@ import { useRegister } from "../hooks/use-register";
 import { registerSchema } from "../schema";
 import { FormInput } from "@/components/form-components/form-input";
 import { Spinner } from "@/components/ui/spinner";
+import Link from "next/link";
 
 export function SignupForm({
   className,
+  callbackUrl,
   ...props
-}: React.ComponentProps<"div">) {
-  const mutation = useRegister();
+}: React.ComponentProps<"div"> & { callbackUrl?: string }) {
+  const mutation = useRegister(callbackUrl);
   const [errors, setErrors] = useState<any>({});
   const [registerPayload, setRegisterPayload] = useState({
     email: "",
@@ -116,7 +118,16 @@ export function SignupForm({
                 </Button>
               </Field>
               <FieldDescription className="text-center">
-                Sudah memiliki akun? <a href="/login">Masuk disini</a>
+                Sudah memiliki akun?{" "}
+                <Link
+                  href={
+                    callbackUrl
+                      ? `/login?callbackUrl=${encodeURIComponent(callbackUrl)}`
+                      : "/login"
+                  }
+                >
+                  Masuk disini
+                </Link>
               </FieldDescription>
             </FieldGroup>
           </form>

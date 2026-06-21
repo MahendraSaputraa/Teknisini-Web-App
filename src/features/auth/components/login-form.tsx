@@ -19,12 +19,14 @@ import { loginSchema } from "../schema";
 import { useLogin } from "../hooks/use-login";
 import { FormInput } from "@/components/form-components/form-input";
 import { Spinner } from "@/components/ui/spinner";
+import Link from "next/link";
 
 export function LoginForm({
   className,
+  callbackUrl,
   ...props
-}: React.ComponentProps<"div">) {
-  const mutation = useLogin();
+}: React.ComponentProps<"div"> & { callbackUrl?: string }) {
+  const mutation = useLogin(callbackUrl);
   const [errors, setErrors] = useState<any>({});
   const [loginPayload, setLoginPayload] = useState({
     email: "",
@@ -127,7 +129,16 @@ export function LoginForm({
               </Field>
 
               <FieldDescription className="text-center">
-                Belum punya akun? <a href="/register">Daftar disini</a>
+                Belum punya akun?{" "}
+                <Link
+                  href={
+                    callbackUrl
+                      ? `/register?callbackUrl=${encodeURIComponent(callbackUrl)}`
+                      : "/register"
+                  }
+                >
+                  Daftar disini
+                </Link>
               </FieldDescription>
             </FieldGroup>
           </form>

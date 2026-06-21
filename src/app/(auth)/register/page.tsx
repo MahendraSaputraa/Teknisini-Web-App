@@ -6,6 +6,13 @@ export const metadata: Metadata = {
   description: "Daftar akun TekniSini sekarang dan dapatkan layanan teknisi panggilan terbaik di Bali dengan mudah.",
 };
 
-export default function LoginPage() {
-  return <SignupForm />;
+export default async function RegisterPage({
+  searchParams,
+}: PageProps<"/register">) {
+  const { callbackUrl } = await searchParams;
+  return (
+    <SignupForm
+      callbackUrl={typeof callbackUrl === "string" ? callbackUrl : undefined}
+    />
+  );
 }

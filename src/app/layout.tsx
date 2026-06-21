@@ -41,15 +41,14 @@ export const metadata: Metadata = {
   authors: [{ name: "TekniSini Team" }],
   creator: "TekniSini",
   publisher: "TekniSini",
+  applicationName: "TekniSini",
+  category: "home services",
   formatDetection: {
     email: false,
     address: false,
     telephone: false,
   },
   metadataBase: new URL("https://teknisini.com"),
-  alternates: {
-    canonical: "/",
-  },
   openGraph: {
     title: "TekniSini | Jasa Teknisi Panggilan Cepat & Terpercaya di Bali",
     description:
@@ -94,7 +93,7 @@ export default function RootLayout({
 }>) {
   return (
     <html
-      lang="en"
+      lang="id"
       className={cn(
         "h-full",
         "antialiased",

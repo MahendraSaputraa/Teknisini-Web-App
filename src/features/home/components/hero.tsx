@@ -41,6 +41,7 @@ export default function Hero() {
               {/* Tombol Abu-abu */}
               <Button
                 variant="secondary"
+                onClick={() => route.push("/#layanan")}
                 className="rounded-full h-14 bg-muted px-8 text-base font-semibold text-foreground hover:bg-muted/80"
               >
                 Pelajari Layanan

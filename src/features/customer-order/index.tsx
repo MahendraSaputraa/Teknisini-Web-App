@@ -19,19 +19,25 @@ export default function CustomerOrderStatusData() {
   const { data: userData } = useCurrentUser();
   const userId = userData?.uid;
 
-  // Fetch active order by ID (dari URL)
+  // Use the route order when present; otherwise select the newest active order.
+  const { data: ordersData, isLoading: historyOrdersLoading } = useGetOrders(
+    userId,
+    !!userId,
+  );
+  const customerOrders = ordersData?.data || [];
+  const activeOrderFromList = customerOrders.find(
+    (order: any) =>
+      order.status !== "completed" && order.status !== "cancelled",
+  );
+  const activeOrderId = orderId || activeOrderFromList?.id;
+
   const { data: activeOrderData, isLoading: activeOrderLoading } =
-    useGetDetailOrder(orderId);
+    useGetDetailOrder(activeOrderId);
+  const activeOrder = activeOrderData?.data || activeOrderFromList;
 
-  const activeOrder = activeOrderData?.data;
-
-  // Fetch history orders based on filter
-  const { data: ordersData, isLoading: historyOrdersLoading } =
-    useGetOrders(!!userId);
-
-  const historyOrders = (ordersData?.data || []).filter((order: any) => {
+  const historyOrders = customerOrders.filter((order: any) => {
     if (order.user_id !== userId) return false;
-    if (orderId && order.id === orderId) return false; // ← exclude active order
+    if (order.id === activeOrderId) return false;
     if (historyFilter === "all") return true;
     return order.status === historyFilter;
   });

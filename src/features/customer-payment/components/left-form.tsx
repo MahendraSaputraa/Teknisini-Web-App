@@ -40,16 +40,14 @@ export default function LeftForm({ fileReceipt, onFileSelect }: LeftFormProps) {
                 <span className="text-sm font-medium text-muted-foreground">
                   Bank Tujuan
                 </span>
-                <span className="font-bold text-primary">
-                  Bank Central Asia (BCA)
-                </span>
+                <span className="font-bold text-primary">SEABANK</span>
               </div>
               <div className="flex flex-col justify-between gap-1 sm:flex-row sm:items-center">
                 <span className="text-sm font-medium text-muted-foreground">
                   Atas Nama (A.N.)
                 </span>
                 <span className="font-bold text-foreground">
-                  PT TEKNISINI DIGITAL INDONESIA
+                  I Kadek Dharma Sukawiana
                 </span>
               </div>
               <div className="flex flex-col justify-between gap-1 sm:flex-row sm:items-center">
@@ -58,7 +56,7 @@ export default function LeftForm({ fileReceipt, onFileSelect }: LeftFormProps) {
                 </span>
                 <div className="flex items-center gap-2">
                   <span className="text-xl font-extrabold tracking-widest text-foreground">
-                    8830 124 559
+                    901680633229
                   </span>
                   <button
                     type="button"

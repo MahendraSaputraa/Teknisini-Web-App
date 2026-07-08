@@ -53,7 +53,7 @@ export default function Navbar({ user }: any) {
             className="text-xl font-bold tracking-tight text-primary"
           >
             <img
-              className="w-full h-5"
+              className="h-5"
               src="/images/logo-TekniSini.png"
               alt="TekniSini Logo"
             />

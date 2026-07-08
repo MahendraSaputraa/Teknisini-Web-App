@@ -2,7 +2,10 @@ import { Button } from "@/components/ui/button";
 import { AlertCircle, Headset } from "lucide-react";
 import React from "react";
 
-export default function BottomDetail() {
+interface DetailProps {
+  orderId: string;
+}
+export default function BottomDetail({ orderId }: DetailProps) {
   return (
     <div className="mt-10 overflow-hidden rounded-3xl border border-destructive/20 bg-red-50/50 p-1 dark:bg-destructive/5 dark:border-destructive/10">
       <div className="flex flex-col items-center justify-between gap-4 rounded-[1.3rem] bg-white p-5 px-6 shadow-sm dark:bg-card sm:flex-row sm:p-6 sm:px-8">
@@ -21,6 +24,12 @@ export default function BottomDetail() {
           </div>
         </div>
         <Button
+          onClick={() =>
+            window.open(
+              `https://wa.me/62881080690563?text=Halo%20Admin%20TekniSini,%20saya%20ingin%20bertanya%20mengenai%20pesanan%20saya.%0A%0AOrder%20ID:%20%23${orderId}`,
+              "_blank",
+            )
+          }
           variant="outline"
           className="w-full rounded-full border-slate-300 font-semibold hover:bg-slate-100 sm:w-auto dark:border-muted dark:hover:bg-muted/50"
         >

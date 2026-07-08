@@ -35,7 +35,7 @@ export default function CustomerOrderTrackingDetailData() {
           paymentStatus={order?.payment_status}
         />
         <ServiceDetail order={order} />
-        <BottomDetail />
+        <BottomDetail orderId={order?.id} />
       </div>
     </div>
   );

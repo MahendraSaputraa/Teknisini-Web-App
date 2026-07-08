@@ -6,15 +6,15 @@ export default function Footer() {
     <footer className="w-full border-t bg-background pt-12 pb-8">
       {/* Menggunakan container agar sejajar dengan Navbar */}
       <div className="container mx-auto px-4">
-        
         {/* Grid layout: 1 kolom di mobile, 4 kolom di layar besar */}
         <div className="grid grid-cols-1 gap-8 md:grid-cols-4 lg:gap-12">
-          
           {/* Kolom 1: Brand & Deskripsi */}
           <div className="flex flex-col gap-4">
             <h2 className="text-xl font-bold text-foreground">TekniSini</h2>
             <p className="max-w-xs text-sm leading-relaxed text-muted-foreground">
-              Jasa teknisi panggilan terbaik di Bali. Solusi praktis untuk service AC, kulkas, listrik, dan perbaikan elektronik lainnya langsung ke lokasi Anda.
+              Jasa teknisi panggilan terbaik di Bali. Solusi praktis untuk
+              service AC, kulkas, listrik, dan perbaikan elektronik lainnya
+              langsung ke lokasi Anda.
             </p>
           </div>
 
@@ -23,23 +23,27 @@ export default function Footer() {
             <h3 className="text-sm font-bold text-foreground">Layanan Kami</h3>
             <ul className="flex flex-col gap-3">
               <li>
-                <Link href="/customer/booking" className="text-sm text-muted-foreground transition-colors hover:text-primary">
+                <Link
+                  href="/customer/booking"
+                  className="text-sm text-muted-foreground transition-colors hover:text-primary"
+                >
                   Service AC Bali
                 </Link>
               </li>
               <li>
-                <Link href="/customer/booking" className="text-sm text-muted-foreground transition-colors hover:text-primary">
-                  Service Kulkas & Mesin Cuci
+                <Link
+                  href="/customer/booking"
+                  className="text-sm text-muted-foreground transition-colors hover:text-primary"
+                >
+                  Perbaikan dan Maintaince Komputer
                 </Link>
               </li>
               <li>
-                <Link href="/customer/booking" className="text-sm text-muted-foreground transition-colors hover:text-primary">
+                <Link
+                  href="/customer/booking"
+                  className="text-sm text-muted-foreground transition-colors hover:text-primary"
+                >
                   Teknisi Listrik Panggilan
-                </Link>
-              </li>
-              <li>
-                <Link href="/customer/booking" className="text-sm text-muted-foreground transition-colors hover:text-primary">
-                  Perbaikan Pompa Air & Pipa
                 </Link>
               </li>
             </ul>
@@ -50,22 +54,34 @@ export default function Footer() {
             <h3 className="text-sm font-bold text-foreground">Navigasi</h3>
             <ul className="flex flex-col gap-3">
               <li>
-                <Link href="/#layanan" className="text-sm text-muted-foreground transition-colors hover:text-primary">
+                <Link
+                  href="/#layanan"
+                  className="text-sm text-muted-foreground transition-colors hover:text-primary"
+                >
                   Tentang Kami
                 </Link>
               </li>
               <li>
-                <Link href="/#step" className="text-sm text-muted-foreground transition-colors hover:text-primary">
+                <Link
+                  href="/#step"
+                  className="text-sm text-muted-foreground transition-colors hover:text-primary"
+                >
                   Cara Kerja
                 </Link>
               </li>
               <li>
-                <Link href="/customer/booking" className="text-sm text-muted-foreground transition-colors hover:text-primary">
+                <Link
+                  href="/customer/booking"
+                  className="text-sm text-muted-foreground transition-colors hover:text-primary"
+                >
                   Buat Pesanan
                 </Link>
               </li>
               <li>
-                <Link href="/customer/order" className="text-sm text-muted-foreground transition-colors hover:text-primary">
+                <Link
+                  href="/customer/order"
+                  className="text-sm text-muted-foreground transition-colors hover:text-primary"
+                >
                   Pesanan Saya
                 </Link>
               </li>
@@ -77,17 +93,26 @@ export default function Footer() {
             <h3 className="text-sm font-bold text-foreground">Dukungan</h3>
             <ul className="flex flex-col gap-3">
               <li>
-                <Link href="#" className="text-sm text-muted-foreground transition-colors hover:text-primary">
+                <Link
+                  href="#"
+                  className="text-sm text-muted-foreground transition-colors hover:text-primary"
+                >
                   Contact Support
                 </Link>
               </li>
               <li>
-                <Link href="#" className="text-sm text-muted-foreground transition-colors hover:text-primary">
+                <Link
+                  href="#"
+                  className="text-sm text-muted-foreground transition-colors hover:text-primary"
+                >
                   Terms of Service
                 </Link>
               </li>
               <li>
-                <Link href="#" className="text-sm text-muted-foreground transition-colors hover:text-primary">
+                <Link
+                  href="#"
+                  className="text-sm text-muted-foreground transition-colors hover:text-primary"
+                >
                   Privacy Policy
                 </Link>
               </li>
@@ -97,29 +122,28 @@ export default function Footer() {
           {/* Kolom 4: Temukan Kami & Copyright */}
           <div className="flex flex-col gap-4">
             <h3 className="text-sm font-bold text-foreground">Temukan Kami</h3>
-            
+
             {/* Social Icons */}
             <div className="flex items-center gap-3">
-              <Link 
-                href="#" 
+              <Link
+                href="#"
                 className="flex h-10 w-10 items-center justify-center rounded-full bg-muted text-muted-foreground transition-colors hover:bg-primary hover:text-primary-foreground"
               >
                 <Globe className="h-5 w-5" />
               </Link>
-              <Link 
-                href="#" 
+              <Link
+                href="#"
                 className="flex h-10 w-10 items-center justify-center rounded-full bg-muted text-muted-foreground transition-colors hover:bg-primary hover:text-primary-foreground"
               >
                 <Mail className="h-5 w-5" />
               </Link>
             </div>
-            
+
             {/* Copyright */}
             <p className="mt-4 text-xs text-muted-foreground md:mt-8">
               © 2026 TekniSini. Solusi Digital untuk Layanan Teknis Terbaik.
             </p>
           </div>
-
         </div>
       </div>
     </footer>

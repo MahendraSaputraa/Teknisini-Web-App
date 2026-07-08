@@ -3,7 +3,6 @@ import React from "react";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 
-
 export default function CtaSection() {
   const route = useRouter();
   return (
@@ -35,15 +34,19 @@ export default function CtaSection() {
             {/* Tombol Aksi */}
             <div className="flex w-full flex-col items-center justify-center gap-4 sm:w-auto sm:flex-row">
               {/* Tombol Putih (Mulai Sekarang) */}
-              <Button 
+              <Button
                 onClick={() => route.push("/customer/booking")}
-                className="w-full h-13 rounded-full bg-primary-foreground px-8 text-base font-semibold text-primary shadow-md transition-all hover:bg-primary-foreground/90 sm:w-auto">
+                className="w-full h-13 rounded-full bg-primary-foreground px-8 text-base font-semibold text-primary shadow-md transition-all hover:bg-primary-foreground/90 sm:w-auto"
+              >
                 Mulai Sekarang
               </Button>
 
               {/* Tombol Outline (Hubungi Support) */}
               <Button
                 variant="outline"
+                onClick={() =>
+                  window.open("https://wa.me/62881080690563", "_blank")
+                }
                 className="w-full h-13 rounded-full border-primary-foreground/30 bg-transparent px-8 text-base font-semibold text-primary-foreground transition-all hover:bg-primary-foreground/10 hover:text-primary-foreground sm:w-auto"
               >
                 Hubungi Support
